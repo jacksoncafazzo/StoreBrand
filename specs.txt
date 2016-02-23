@@ -1,0 +1,14 @@
+test 1:
+check to make sure the categories table is empty to start.
+
+test 2:
+Test will return true if first category equals second category testing the override of Equals.
+
+test 3:
+this test will save a new category to the category table in our database.
+
+test 4:
+this tests setting an id to the ne category created in our category table.
+
+test 5:
+this tests the find  using GetId for our category in the category table.

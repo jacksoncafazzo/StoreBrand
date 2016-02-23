@@ -13,5 +13,32 @@ namespace ToDoList
       DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=todo_test;Integrated Security=SSPI;";
     }
 
+    [Fact]
+    public void Test_CategoriesEmptyAtFirst()
+    {
+      //Arrange, Act
+      int result = Category.GetAll().Count;
+
+      //Assert
+      Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void Test_Equal_ReturnsTrueForSameName()
+    {
+      //Arrange, Act
+      Category firstCategory = new Category("Household Chores");
+      Category secondCategory = new Category("Household Chores");
+
+      //Assert
+      Assert.Equal(firstCategory, secondCategory);
+    }
+
+
+    public void Dispose()
+    {
+      // Task.DeleteAll();
+      Category.DeleteAll();
+    }
   }
 }
