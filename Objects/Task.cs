@@ -1,4 +1,4 @@
-uusing System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System;
 
@@ -124,7 +124,7 @@ namespace ToDoList
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
-      SqlCommand cmd = new SqlCommand("DELETE FROM tasks;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE * FROM tasks;", conn);
       cmd.ExecuteNonQuery();
     }
 
@@ -163,6 +163,10 @@ namespace ToDoList
       }
 
       return foundTask;
+    }
+    public override int GetHashCode()
+    {
+      return 0;
     }
   }
 }
