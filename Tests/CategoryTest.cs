@@ -91,7 +91,6 @@ namespace ToDoList
       Task secondTask = new Task("Do the dishes", testCategory.GetId());
       secondTask.Save();
 
-
       List<Task> testTaskList = new List<Task> {firstTask, secondTask};
       List<Task> resultTaskList = testCategory.GetTasks();
 
