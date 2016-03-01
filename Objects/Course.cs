@@ -1,88 +1,101 @@
-// using System.Collections.Generic;
-// using System.Data.SqlClient;
-// using System;
-//
-// namespace ToDoList
-// {
-//   public class Category
-//   {
-//     private int _id;
-//     private string _name;
-//
-//     public Category(string Name, int Id = 0)
-//     {
-//       _id = Id;
-//       _name = Name;
-//     }
-//
-//     public override bool Equals(System.Object otherCategory)
-//     {
-//       if (!(otherCategory is Category))
-//       {
-//         return false;
-//       }
-//       else
-//       {
-//         Category newCategory = (Category) otherCategory;
-//         bool idEquality = this.GetId() == newCategory.GetId();
-//         bool nameEquality = this.GetName() == newCategory.GetName();
-//         return (idEquality && nameEquality);
-//       }
-//     }
-//
-//     public int GetId()
-//     {
-//       return _id;
-//     }
-//     public string GetName()
-//     {
-//     return _name;
-//     }
-//     public void SetName(string newName)
-//     {
-//       _name = newName;
-//     }
-//     public static List<Category> GetAll()
-//     {
-//       List<Category> allCategories = new List<Category>{};
-//
-//       SqlConnection conn = DB.Connection();
-//       SqlDataReader rdr = null;
-//       conn.Open();
-//
-//       SqlCommand cmd = new SqlCommand("SELECT * FROM categories;", conn);
-//       rdr = cmd.ExecuteReader();
-//
-//       while(rdr.Read())
-//       {
-//         int categoryId = rdr.GetInt32(0);
-//         string categoryName = rdr.GetString(1);
-//         Category newCategory = new Category(categoryName, categoryId);
-//         allCategories.Add(newCategory);
-//       }
-//
-//       if (rdr != null)
-//       {
-//         rdr.Close();
-//       }
-//       if (conn != null)
-//       {
-//         conn.Close();
-//       }
-//
-//       return allCategories;
-//     }
-//
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System;
+
+namespace HardKnockRegistrar
+{
+  public class Courses
+  {
+    private int _id;
+    private string _name;
+    private string _course_number;
+
+    public Courses(string Name, string CourseNumber, int Id = 0)
+    {
+      _id = Id;
+      _name = Name;
+      _course_number = CourseNumber;
+    }
+
+    public override bool Equals(System.Object otherCourses)
+    {
+      if (!(otherCourses is Courses))
+      {
+        return false;
+      }
+      else
+      {
+        Courses newCourses = (Courses) otherCourses;
+        bool idEquality = this.GetId() == newCourses.GetId();
+        bool nameEquality = this.GetName() == newCourses.GetName();
+        bool numberEquality = this.GetCourseNumber() == newCourses.GetCourseNumber();
+        return (idEquality && nameEquality && numberEquality);
+      }
+    }
+
+    public int GetId()
+    {
+      return _id;
+    }
+    public string GetName()
+    {
+    return _name;
+    }
+    public void SetName(string newName)
+    {
+      _name = newName;
+    }
+    public string GetCourseNumber()
+    {
+      return _course_number;
+    }
+    public void SetCourseNumber(string newNumber)
+    {
+      _course_number = newNumber;
+    }
+
+    public static List<Courses> GetAll()
+    {
+      List<Courses> allCategories = new List<Courses>{};
+
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM courses;", conn);
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        int courseId = rdr.GetInt32(0);
+        string courseName = rdr.GetString(1);
+        string courseNumber = rdr.GetString(2);
+        Courses newCourses = new Courses(courseName, courseNumber, courseId);
+        allCategories.Add(newCourses);
+      }
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+
+      return allCategories;
+    }
+
 //     public void Save()
 //     {
 //       SqlConnection conn = DB.Connection();
 //       SqlDataReader rdr;
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("INSERT INTO categories (name) OUTPUT INSERTED.id VALUES (@CategoryName);", conn);
+//       SqlCommand cmd = new SqlCommand("INSERT INTO courses (name) OUTPUT INSERTED.id VALUES (@CoursesName);", conn);
 //
 //       SqlParameter nameParameter = new SqlParameter();
-//       nameParameter.ParameterName = "@CategoryName";
+//       nameParameter.ParameterName = "@CoursesName";
 //       nameParameter.Value = this.GetName();
 //       cmd.Parameters.Add(nameParameter);
 //       rdr = cmd.ExecuteReader();
@@ -104,32 +117,32 @@
 //     {
 //       SqlConnection conn = DB.Connection();
 //       conn.Open();
-//       SqlCommand cmd = new SqlCommand("DELETE FROM categories;", conn);
+//       SqlCommand cmd = new SqlCommand("DELETE FROM courses;", conn);
 //       cmd.ExecuteNonQuery();
 //     }
 //
-//     public static Category Find(int id)
+//     public static Courses Find(int id)
 //     {
 //       SqlConnection conn = DB.Connection();
 //       SqlDataReader rdr = null;
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("SELECT * FROM categories WHERE id = @CategoryID;", conn);
-//       SqlParameter CategoryIDParemeter = new SqlParameter();
-//       CategoryIDParemeter.ParameterName = "@CategoryId";
-//       CategoryIDParemeter.Value = id.ToString();
-//       cmd.Parameters.Add(CategoryIDParemeter);
+//       SqlCommand cmd = new SqlCommand("SELECT * FROM courses WHERE id = @CoursesID;", conn);
+//       SqlParameter CoursesIDParemeter = new SqlParameter();
+//       CoursesIDParemeter.ParameterName = "@CoursesId";
+//       CoursesIDParemeter.Value = id.ToString();
+//       cmd.Parameters.Add(CoursesIDParemeter);
 //       rdr = cmd.ExecuteReader();
 //
-//       int foundCategoryId = 0;
-//       string foundCategoryDescription = null;
+//       int foundCoursesId = 0;
+//       string foundCoursesDescription = null;
 //
 //       while(rdr.Read())
 //       {
-//         foundCategoryId = rdr.GetInt32(0);
-//         foundCategoryDescription = rdr.GetString(1);
+//         foundCoursesId = rdr.GetInt32(0);
+//         foundCoursesDescription = rdr.GetString(1);
 //       }
-//       Category foundCategory = new Category(foundCategoryDescription, foundCategoryId);
+//       Courses foundCourses = new Courses(foundCoursesDescription, foundCoursesId);
 //
 //       if (rdr != null)
 //       {
@@ -139,7 +152,7 @@
 //       {
 //         conn.Close();
 //       }
-//       return foundCategory;
+//       return foundCourses;
 //     }
 //
 //     public List<Task> GetTasks()
@@ -148,11 +161,11 @@
 //       SqlDataReader rdr = null;
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("SELECT task_id FROM categories_tasks WHERE category_id = @CategoryId;", conn);
-//       SqlParameter categoryIdParameter = new SqlParameter();
-//       categoryIdParameter.ParameterName = "@CategoryId";
-//       categoryIdParameter.Value = this.GetId();
-//       cmd.Parameters.Add(categoryIdParameter);
+//       SqlCommand cmd = new SqlCommand("SELECT task_id FROM courses_tasks WHERE course_id = @CoursesId;", conn);
+//       SqlParameter courseIdParameter = new SqlParameter();
+//       courseIdParameter.ParameterName = "@CoursesId";
+//       courseIdParameter.Value = this.GetId();
+//       cmd.Parameters.Add(courseIdParameter);
 //
 //       rdr = cmd.ExecuteReader();
 //
@@ -203,12 +216,12 @@
 //      SqlConnection conn = DB.Connection();
 //      conn.Open();
 //
-//      SqlCommand cmd = new SqlCommand("DELETE FROM categories WHERE id = @CategoryId; DELETE FROM categories_tasks WHERE category_id = @CategoryId;", conn);
-//      SqlParameter categoryIdParameter = new SqlParameter();
-//      categoryIdParameter.ParameterName = "@CategoryId";
-//      categoryIdParameter.Value = this.GetId();
+//      SqlCommand cmd = new SqlCommand("DELETE FROM courses WHERE id = @CoursesId; DELETE FROM courses_tasks WHERE course_id = @CoursesId;", conn);
+//      SqlParameter courseIdParameter = new SqlParameter();
+//      courseIdParameter.ParameterName = "@CoursesId";
+//      courseIdParameter.Value = this.GetId();
 //
-//      cmd.Parameters.Add(categoryIdParameter);
+//      cmd.Parameters.Add(courseIdParameter);
 //      cmd.ExecuteNonQuery();
 //
 //      if (conn != null)
@@ -222,11 +235,11 @@
 //       SqlConnection conn = DB.Connection();
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("INSERT INTO categories_tasks (category_id, task_id) VALUES (@CategoryId, @TaskId)", conn);
-//       SqlParameter categoryIdParameter = new SqlParameter();
-//       categoryIdParameter.ParameterName = "@CategoryId";
-//       categoryIdParameter.Value = this.GetId();
-//       cmd.Parameters.Add(categoryIdParameter);
+//       SqlCommand cmd = new SqlCommand("INSERT INTO courses_tasks (course_id, task_id) VALUES (@CoursesId, @TaskId)", conn);
+//       SqlParameter courseIdParameter = new SqlParameter();
+//       courseIdParameter.ParameterName = "@CoursesId";
+//       courseIdParameter.Value = this.GetId();
+//       cmd.Parameters.Add(courseIdParameter);
 //
 //       SqlParameter taskIdParameter = new SqlParameter();
 //       taskIdParameter.ParameterName = "@TaskId";
@@ -245,5 +258,5 @@
 //     {
 //       return 0;
 //     }
-//   }
-// }
+  }
+}

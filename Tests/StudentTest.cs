@@ -100,7 +100,7 @@ namespace HardKnockRegistrar
 //       Assert.Equal(testList, result);
 //     }
 //
-//     [Fact]
+// //     [Fact]
 //     public void Test_GetCategories_ReturnsAllStudentCategories()
 //     {
 //       //Arrange
