@@ -27,8 +27,28 @@ namespace ToDoList
     public void Test_EqualOverrideTrueForSameDescription()
     {
       //Arrange, Act
-      Task firstTask = new Task("Mow the lawn", 1);
-      Task secondTask = new Task("Mow the lawn", 1);
+      Task firstTask = new Task("Mow the lawn");
+      Task secondTask = new Task("Mow the lawn");
+
+      //Assert
+      Assert.Equal(firstTask, secondTask);
+    }
+    [Fact]
+    public void Test_EmptyAtFirst()
+    {
+      //Arrange, Act
+      int result = Task.GetAll().Count;
+
+      //Assert
+      Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void Test_EqualOverrideTrueForSameDescription()
+    {
+      //Arrange, Act
+      Task firstTask = new Task("Mow the lawn");
+      Task secondTask = new Task("Mow the lawn");
 
       //Assert
       Assert.Equal(firstTask, secondTask);
@@ -38,7 +58,7 @@ namespace ToDoList
     public void Test_Save()
     {
       //Arrange
-      Task testTask = new Task("Mow the lawn", 1);
+      Task testTask = new Task("Mow the lawn");
       testTask.Save();
 
       //Act
@@ -50,10 +70,10 @@ namespace ToDoList
     }
 
     [Fact]
-    public void Test_Save_AssignsIdToObject()
+    public void Test_SaveAssignsIdToObject()
     {
       //Arrange
-      Task testTask = new Task("Mow the lawn", 1);
+      Task testTask = new Task("Mow the lawn");
       testTask.Save();
 
       //Act
@@ -67,22 +87,23 @@ namespace ToDoList
     }
 
     [Fact]
-    public void Test_Find_FindsTaskInDatabase()
+    public void Test_FindFindsTaskInDatabase()
     {
       //Arrange
-      Task testTask = new Task("Mow the lawn", 1);
+      Task testTask = new Task("Mow the lawn");
       testTask.Save();
 
       //Act
-      Task foundTask = Task.Find(testTask.GetId());
+      Task result = Task.Find(testTask.GetId());
 
       //Assert
-      Assert.Equal(testTask, foundTask);
+      Assert.Equal(testTask, result);
     }
 
     public void Dispose()
     {
       Task.DeleteAll();
+      Category.DeleteAll();
     }
   }
 }

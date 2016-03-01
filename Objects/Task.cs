@@ -2,124 +2,123 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System;
 
-namespace ToDoList
+[Fact]
+    public void Test_EmptyAtFirst()
+    {
+      //Arrange, Act
+      int result = Task.GetAll().Count;
+
+      //Assert
+      Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void Test_EqualOverrideTrueForSameDescription()
+    {
+      //Arrange, Act
+      Task firstTask = new Task("Mow the lawn");
+      Task secondTask = new Task("Mow the lawn");
+
+      //Assert
+      Assert.Equal(firstTask, secondTask);
+    }
+
+    namespace ToDoList
 {
   public class Task
-{
-  private int _id;
-  private string _name;
-  private int _categoryId;
-
-  public Task(string Name, int CategoryId, int Id = 0)
   {
-    _id = Id;
-    _name = Name;
-    _categoryId = CategoryId;
-  }
+    private int _id;
+    private string _description;
 
-  public override bool Equals(System.Object otherTask)
-  {
-    if (!(otherTask is Task))
+    public Task(string Description, int Id = 0)
     {
-      return false;
+      _id = Id;
+      _description = Description;
     }
-    else
+
+    public override bool Equals(System.Object otherTask)
     {
-      Task newTask = (Task) otherTask;
-      bool idEquality = this.GetId() == newTask.GetId();
-      bool nameEquality = this.GetName() == newTask.GetName();
-      bool categoryEquality = this.GetCategoryId() == newTask.GetCategoryId();
-      return (idEquality && nameEquality && categoryEquality);
+        if (!(otherTask is Task))
+        {
+          return false;
+        }
+        else {
+          Task newTask = (Task) otherTask;
+          bool idEquality = this.GetId() == newTask.GetId();
+          bool descriptionEquality = this.GetDescription() == newTask.GetDescription();
+          return (idEquality && descriptionEquality);
+        }
     }
-  }
 
     public int GetId()
     {
       return _id;
     }
-
-    public string GetName()
+    public string GetDescription()
     {
-      return _name;
+      return _description;
     }
-
-    public void SetName(string newName)
+    public void SetDescription(string newDescription)
     {
-      _name = newName;
+      _description = newDescription;
     }
-
-    public int GetCategoryId()
-  {
-    return _categoryId;
-  }
-  public void SetCategoryId(int newCategoryId)
-  {
-    _categoryId = newCategoryId;
-  }
-
-  public static List<Task> GetAll()
-  {
-    List<Task> AllTasks = new List<Task>{};
-
-    SqlConnection conn = DB.Connection();
-    SqlDataReader rdr = null;
-    conn.Open();
-
-    SqlCommand cmd = new SqlCommand("SELECT * FROM tasks;", conn);
-    rdr = cmd.ExecuteReader();
-
-    while(rdr.Read())
+    public static List<Task> GetAll()
     {
-      int taskId = rdr.GetInt32(0);
-      string taskName = rdr.GetString(1);
-      int taskCategoryId = rdr.GetInt32(2);
-      Task newTask = new Task(taskName, taskCategoryId, taskId);
-      AllTasks.Add(newTask);
+      List<Task> AllTasks = new List<Task>{};
+
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM tasks", conn);
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        int taskId = rdr.GetInt32(0);
+        string taskDescription = rdr.GetString(1);
+        Task newTask = new Task(taskDescription, taskId);
+        AllTasks.Add(newTask);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return AllTasks;
     }
-    if (rdr != null)
+    public void Save()
     {
-      rdr.Close();
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO tasks (description) OUTPUT INSERTED.id VALUES (@TaskDescription)", conn);
+
+      SqlParameter descriptionParam = new SqlParameter();
+      descriptionParam.ParameterName = "@TaskDescription";
+      descriptionParam.Value = this.GetDescription();
+
+      cmd.Parameters.Add(descriptionParam);
+
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
-    if (conn != null)
-    {
-      conn.Close();
-    }
-    return AllTasks;
-  }
-  public void Save()
-  {
-    SqlConnection conn = DB.Connection();
-    SqlDataReader rdr;
-    conn.Open();
-
-    SqlCommand cmd = new SqlCommand("INSERT INTO tasks (name, category_id) OUTPUT INSERTED.id VALUES (@TaskName, @TaskCategoryId);", conn);
-
-    SqlParameter nameParameter = new SqlParameter();
-    nameParameter.ParameterName = "@TaskName";
-    nameParameter.Value = this.GetName();
-
-    SqlParameter categoryIdParameter = new SqlParameter();
-    categoryIdParameter.ParameterName = "@TaskCategoryId";
-    categoryIdParameter.Value = this.GetCategoryId();
-
-    cmd.Parameters.Add(nameParameter);
-    cmd.Parameters.Add(categoryIdParameter);
-
-    rdr = cmd.ExecuteReader();
-
-    while(rdr.Read())
-    {
-      this._id = rdr.GetInt32(0);
-    }
-    if (rdr != null)
-    {
-      rdr.Close();
-    }
-    if (conn != null)
-    {
-      conn.Close();
-    }
-  }
 
     public static void DeleteAll()
     {
@@ -135,7 +134,7 @@ namespace ToDoList
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT * FROM tasks WHERE id = @TaskId;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT * FROM tasks WHERE id = @TaskId", conn);
       SqlParameter taskIdParameter = new SqlParameter();
       taskIdParameter.ParameterName = "@TaskId";
       taskIdParameter.Value = id.ToString();
@@ -143,16 +142,14 @@ namespace ToDoList
       rdr = cmd.ExecuteReader();
 
       int foundTaskId = 0;
-      string foundTaskName = null;
-      int foundTaskCategoryId = 0;
+      string foundTaskDescription = null;
 
       while(rdr.Read())
       {
         foundTaskId = rdr.GetInt32(0);
-        foundTaskName = rdr.GetString(1);
-        foundTaskCategoryId = rdr.GetInt32(2);
+        foundTaskDescription = rdr.GetString(1);
       }
-      Task foundTask = new Task(foundTaskName, foundTaskCategoryId, foundTaskId);
+      Task foundTask = new Task(foundTaskDescription, foundTaskId);
 
       if (rdr != null)
       {
@@ -162,12 +159,27 @@ namespace ToDoList
       {
         conn.Close();
       }
-
       return foundTask;
     }
-    public override int GetHashCode()
+
+    public void Delete()
     {
-      return 0;
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM tasks WHERE id = @TaskId;", conn);
+
+      SqlParameter taskIdParameter = new SqlParameter();
+      taskIdParameter.ParameterName = "@TaskId";
+      taskIdParameter.Value = this.GetId();
+
+      cmd.Parameters.Add(taskIdParameter);
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
   }
 }
