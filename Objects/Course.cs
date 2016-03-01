@@ -163,60 +163,78 @@ namespace HardKnockRegistrar
       return foundCourse;
     }
 
-//     public List<Task> GetTasks()
-//     {
-//       SqlConnection conn = DB.Connection();
-//       SqlDataReader rdr = null;
-//       conn.Open();
+    public List<Student> GetStudents()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT students.* FROM courses JOIN enrollments ON (courses.id = enrollments.course_id) JOIN students ON (enrollments.student_id = students.id) WHERE courses.id = @CourseId", conn);
+      SqlParameter courseIdParameter = new SqlParameter();
+      courseIdParameter.ParameterName = "@CourseId";
+      courseIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(courseIdParameter);
+
+      rdr = cmd.ExecuteReader();
+
+      List<Student> students = new List<Student> {};
+      int studentId = 0;
+      string studentName = null;
+      DateTime studentDate = new DateTime(2016, 01, 01);
+
+      while(rdr.Read())
+      {
+        studentId = rdr.GetInt32(0);
+        studentName = rdr.GetString(1);
+        studentDate = rdr.GetDateTime(2);
+        Student student = new Student(studentName, studentDate, studentId);
+        students.Add(student);
+      }
+      foreach (Student student in students)
+      {
+        Console.WriteLine(student.GetName() + " " + student.GetDateOfEnrollment());
+      }
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return students;
+    }
 //
-//       SqlCommand cmd = new SqlCommand("SELECT task_id FROM courses_tasks WHERE course_id = @CourseId;", conn);
-//       SqlParameter courseIdParameter = new SqlParameter();
-//       courseIdParameter.ParameterName = "@CourseId";
-//       courseIdParameter.Value = this.GetId();
-//       cmd.Parameters.Add(courseIdParameter);
-//
-//       rdr = cmd.ExecuteReader();
-//
-//       List<int> taskIds = new List<int> {};
-//       while(rdr.Read())
-//       {
-//         int taskId = rdr.GetInt32(0);
-//         taskIds.Add(taskId);
-//       }
-//       if (rdr != null)
-//       {
-//         rdr.Close();
-//       }
-//
-//       List<Task> tasks = new List<Task> {};
-//       foreach (int taskId in taskIds)
+//       List<Student> students = new List<Student> {};
+//       foreach (int studentId in studentIds)
 //       {
 //         SqlDataReader queryReader = null;
-//         SqlCommand taskQuery = new SqlCommand("SELECT * FROM tasks WHERE id = @TaskId;", conn);
+//         SqlCommand studentQuery = new SqlCommand("SELECT * FROM students WHERE id = @StudentId;", conn);
 //
-//         SqlParameter taskIdParameter = new SqlParameter();
-//         taskIdParameter.ParameterName = "@TaskId";
-//         taskIdParameter.Value = taskId;
-//         taskQuery.Parameters.Add(taskIdParameter);
+//         SqlParameter studentIdParameter = new SqlParameter();
+//         studentIdParameter.ParameterName = "@StudentId";
+//         studentIdParameter.Value = studentId;
+//         studentQuery.Parameters.Add(studentIdParameter);
 //
-//         queryReader = taskQuery.ExecuteReader();
+//         queryReader = studentQuery.ExecuteReader();
 //         while(queryReader.Read())
 //         {
-//           int thisTaskId = queryReader.GetInt32(0);
-//           string taskDescription = queryReader.GetString(1);
-//           Task foundTask = new Task(taskDescription, thisTaskId);
-//           tasks.Add(foundTask);
+//           int thisStudentId = queryReader.GetInt32(0);
+//           string studentDescription = queryReader.GetString(1);
+//           Student foundStudent = new Student(studentDescription, thisStudentId);
+//           students.Add(foundStudent);
 //         }
 //         if (queryReader != null)
 //         {
 //           queryReader.Close();
 //         }
 //       }
-//       if (conn != null)
-//       {
-//         conn.Close();
-//       }
-//       return tasks;
+      // if (conn != null)
+      // {
+      //   conn.Close();
+      // }
+//       return students;
 //     }
 //
 //     public void Delete()
@@ -224,7 +242,7 @@ namespace HardKnockRegistrar
 //      SqlConnection conn = DB.Connection();
 //      conn.Open();
 //
-//      SqlCommand cmd = new SqlCommand("DELETE FROM courses WHERE id = @CourseId; DELETE FROM courses_tasks WHERE course_id = @CourseId;", conn);
+//      SqlCommand cmd = new SqlCommand("DELETE FROM courses WHERE id = @CourseId; DELETE FROM courses_students WHERE course_id = @CourseId;", conn);
 //      SqlParameter courseIdParameter = new SqlParameter();
 //      courseIdParameter.ParameterName = "@CourseId";
 //      courseIdParameter.Value = this.GetId();
@@ -238,21 +256,21 @@ namespace HardKnockRegistrar
 //      }
 //    }
 //
-//     public void AddTask(Task newTask)
+//     public void AddStudent(Student newStudent)
 //     {
 //       SqlConnection conn = DB.Connection();
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("INSERT INTO courses_tasks (course_id, task_id) VALUES (@CourseId, @TaskId)", conn);
+//       SqlCommand cmd = new SqlCommand("INSERT INTO courses_students (course_id, student_id) VALUES (@CourseId, @StudentId)", conn);
 //       SqlParameter courseIdParameter = new SqlParameter();
 //       courseIdParameter.ParameterName = "@CourseId";
 //       courseIdParameter.Value = this.GetId();
 //       cmd.Parameters.Add(courseIdParameter);
 //
-//       SqlParameter taskIdParameter = new SqlParameter();
-//       taskIdParameter.ParameterName = "@TaskId";
-//       taskIdParameter.Value = newTask.GetId();
-//       cmd.Parameters.Add(taskIdParameter);
+//       SqlParameter studentIdParameter = new SqlParameter();
+//       studentIdParameter.ParameterName = "@StudentId";
+//       studentIdParameter.Value = newStudent.GetId();
+//       cmd.Parameters.Add(studentIdParameter);
 //
 //       cmd.ExecuteNonQuery();
 //
