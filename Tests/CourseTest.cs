@@ -81,22 +81,49 @@ namespace HardKnockRegistrar
     }
 
     [Fact]
+    public void Test_AddEnrollment_AddsStudentToCourse()
+    {
+      //Arrange
+      Course testCourse = new Course("David Copperfield", "MAG120");
+      testCourse.Save();
+
+      Student testStudent = new Student ("Harry Henderson", new DateTime(2014, 01, 01));
+      testStudent.Save();
+
+      Student testStudent2 = new Student ("Sally Henderson", new DateTime(2014, 01, 01));
+      testStudent2.Save();
+
+      //Act
+      testCourse.AddEnrollment(testStudent);
+      testCourse.AddEnrollment(testStudent2);
+
+      List<Student> result = testCourse.GetStudents();
+      List<Student> testList = new List<Student>{testStudent, testStudent2};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
     public void Test_GetStudents_RetrievesAllStudentsWithCourse()
     {
       Course testCourse = new Course("How It Be", "HIB500");
       testCourse.Save();
 
-      Student firstStudent = new Student("Pippi Longstocking", new DateTime(2016, 03, 13), testCourse.GetId());
+      Student firstStudent = new Student("Pippi Longstocking", new DateTime(2016, 03, 13));
       firstStudent.Save();
-      Student secondStudent = new Student("Matilda", new DateTime(2016, 02, 13), testCourse.GetId());
+      testCourse.AddEnrollment(firstStudent);
+
+      Student secondStudent = new Student("Matilda", new DateTime(2016, 02, 13));
       secondStudent.Save();
+      testCourse.AddEnrollment(secondStudent);
 
       List<Student> testStudentList = new List<Student> {firstStudent, secondStudent};
       List<Student> resultStudentList = testCourse.GetStudents();
 
       Assert.Equal(testStudentList, resultStudentList);
     }
-//
+// //
 //     [Fact]
 //     public void Test_Delete_DeletesCourseFromDatabase()
 //     {

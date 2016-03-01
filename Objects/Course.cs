@@ -92,7 +92,7 @@ namespace HardKnockRegistrar
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO courses (name, course_number) OUTPUT INSERTED.id VALUES (@CourseName, @CourseNumber);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO courses (name, course_number) OUTPUT INSERTED.id VALUES (@CourseName, @CourseNumber); INSERT INTO enrollments (course_id) OUTPUT INSERTED.id VALUES (@CourseId)", conn);
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@CourseName";
@@ -103,6 +103,11 @@ namespace HardKnockRegistrar
       numberParameter.ParameterName = "@CourseNumber";
       numberParameter.Value = this.GetCourseNumber();
       cmd.Parameters.Add(numberParameter);
+
+      SqlParameter courseIdParameter = new SqlParameter();
+      courseIdParameter.ParameterName = "@CourseId";
+      courseIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(courseIdParameter);
 
       rdr = cmd.ExecuteReader();
       while(rdr.Read())
@@ -163,6 +168,31 @@ namespace HardKnockRegistrar
       return foundCourse;
     }
 
+    public void AddEnrollment(Student newStudent)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO enrollments (course_id, student_id) VALUES (@CourseId, @StudentId)", conn);
+
+      SqlParameter courseIdParameter = new SqlParameter();
+      courseIdParameter.ParameterName = "@CourseId";
+      courseIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(courseIdParameter);
+
+      SqlParameter studentIdParameter = new SqlParameter();
+      studentIdParameter.ParameterName = "@StudentId";
+      studentIdParameter.Value = newStudent.GetId();
+      cmd.Parameters.Add(studentIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
     public List<Student> GetStudents()
     {
       SqlConnection conn = DB.Connection();
@@ -190,10 +220,6 @@ namespace HardKnockRegistrar
         Student student = new Student(studentName, studentDate, studentId);
         students.Add(student);
       }
-      foreach (Student student in students)
-      {
-        Console.WriteLine(student.GetName() + " " + student.GetDateOfEnrollment());
-      }
 
       if (rdr != null)
       {
@@ -203,6 +229,7 @@ namespace HardKnockRegistrar
       {
         conn.Close();
       }
+
       return students;
     }
 //

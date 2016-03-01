@@ -90,7 +90,7 @@ namespace HardKnockRegistrar
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO students (name, date_of_enrollment) ## enrollments (student_id) OUTPUT INSERTED.id VALUES (@StudentName, @DateOfEnrollment) ## @StudentId", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO students (name, date_of_enrollment) OUTPUT INSERTED.id VALUES (@StudentName, @DateOfEnrollment); INSERT INTO enrollments (student_id) OUTPUT INSERTED.id VALUES (@StudentId);", conn);
 
       SqlParameter nameParam = new SqlParameter();
       nameParam.ParameterName = "@StudentName";
