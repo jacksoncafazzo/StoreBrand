@@ -186,7 +186,6 @@ namespace HardKnockRegistrar
       }
     }
 
-
     public void AddCourse(Course newCourse)
     {
       SqlConnection conn = DB.Connection();
@@ -243,39 +242,6 @@ namespace HardKnockRegistrar
       {
         rdr.Close();
       }
-
-      // List<Course> courses = new List<Course> {};
-      //
-      // foreach (int courseId in courseIds)
-      // {
-      //   SqlDataReader queryReader = null;
-      //   SqlCommand courseQuery = new SqlCommand("SELECT * FROM courses WHERE id = @CourseId;", conn);
-      //
-      //   SqlParameter courseIdParameter = new SqlParameter();
-      //   courseIdParameter.ParameterName = "@CourseId";
-      //   courseIdParameter.Value = courseId;
-      //   courseQuery.Parameters.Add(courseIdParameter);
-      //
-      //   queryReader = courseQuery.ExecuteReader();
-      //   while (queryReader.Read())
-      //   {
-      //     int thisCourseId = queryReader.GetInt32(0);
-      //     string courseName = queryReader.GetString(1);
-      //     string courseNumber = queryReader.GetString(2);
-      //     Course foundCourse = new Course(courseName, courseNumber, thisCourseId);
-      //     courses.Add(foundCourse);
-      //   }
-      //
-      //   if (queryReader != null)
-      //   {
-      //     queryReader.Close();
-      //   }
-      // }
-      //
-      // if (conn != null)
-      // {
-      //   conn.Close();
-      // }
 
       return courses;
     }
