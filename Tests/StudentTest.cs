@@ -66,20 +66,20 @@ namespace HardKnockRegistrar
       Assert.Equal(testId, result);
     }
 
-//     [Fact]
-//     public void Test_FindFindsStudentInDatabase()
-//     {
-//       //Arrange
-//       Student testStudent = new Student("Mow the lawn");
-//       testStudent.Save();
-//
-//       //Act
-//       Student result = Student.Find(testStudent.GetId());
-//
-//       //Assert
-//       Assert.Equal(testStudent, result);
-//     }
-//
+    [Fact]
+    public void Test_FindFindsStudentInDatabase()
+    {
+      //Arrange
+      Student testStudent = new Student("Peter Griffin", new DateTime (2016, 01, 01));
+      testStudent.Save();
+
+      //Act
+      Student result = Student.Find(testStudent.GetId());
+
+      //Assert
+      Assert.Equal(testStudent, result);
+    }
+
 //     [Fact]
 //     public void Test_AddCategory_AddsCategoryToStudent()
 //     {

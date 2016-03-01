@@ -126,41 +126,43 @@ namespace HardKnockRegistrar
       SqlCommand cmd = new SqlCommand("DELETE FROM students;", conn);
       cmd.ExecuteNonQuery();
     }
-  //
-  //   public static Student Find(int id)
-  //   {
-  //     SqlConnection conn = DB.Connection();
-  //     SqlDataReader rdr = null;
-  //     conn.Open();
-  //
-  //     SqlCommand cmd = new SqlCommand("SELECT * FROM students WHERE id = @StudentId", conn);
-  //     SqlParameter studentIdParameter = new SqlParameter();
-  //     studentIdParameter.ParameterName = "@StudentId";
-  //     studentIdParameter.Value = id.ToString();
-  //     cmd.Parameters.Add(studentIdParameter);
-  //     rdr = cmd.ExecuteReader();
-  //
-  //     int foundStudentId = 0;
-  //     string foundStudentName = null;
-  //
-  //     while(rdr.Read())
-  //     {
-  //       foundStudentId = rdr.GetInt32(0);
-  //       foundStudentName = rdr.GetString(1);
-  //     }
-  //     Student foundStudent = new Student(foundStudentName, foundStudentId);
-  //
-  //     if (rdr != null)
-  //     {
-  //       rdr.Close();
-  //     }
-  //     if (conn != null)
-  //     {
-  //       conn.Close();
-  //     }
-  //     return foundStudent;
-  //   }
-  //
+
+    public static Student Find(int id)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM students WHERE id = @StudentId", conn);
+      SqlParameter studentIdParameter = new SqlParameter();
+      studentIdParameter.ParameterName = "@StudentId";
+      studentIdParameter.Value = id.ToString();
+      cmd.Parameters.Add(studentIdParameter);
+      rdr = cmd.ExecuteReader();
+
+      int foundStudentId = 0;
+      string foundStudentName = null;
+      DateTime foundDateOfEnrollment = new DateTime(2016, 01, 01);
+
+      while(rdr.Read())
+      {
+        foundStudentId = rdr.GetInt32(0);
+        foundStudentName = rdr.GetString(1);
+        foundDateOfEnrollment = rdr.GetDateTime(2);
+      }
+      Student foundStudent = new Student(foundStudentName, foundDateOfEnrollment, foundStudentId);
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return foundStudent;
+    }
+
   //   public void Delete()
   //   {
   //     SqlConnection conn = DB.Connection();
