@@ -232,61 +232,29 @@ namespace HardKnockRegistrar
 
       return students;
     }
-//
-//       List<Student> students = new List<Student> {};
-//       foreach (int studentId in studentIds)
-//       {
-//         SqlDataReader queryReader = null;
-//         SqlCommand studentQuery = new SqlCommand("SELECT * FROM students WHERE id = @StudentId;", conn);
-//
-//         SqlParameter studentIdParameter = new SqlParameter();
-//         studentIdParameter.ParameterName = "@StudentId";
-//         studentIdParameter.Value = studentId;
-//         studentQuery.Parameters.Add(studentIdParameter);
-//
-//         queryReader = studentQuery.ExecuteReader();
-//         while(queryReader.Read())
-//         {
-//           int thisStudentId = queryReader.GetInt32(0);
-//           string studentDescription = queryReader.GetString(1);
-//           Student foundStudent = new Student(studentDescription, thisStudentId);
-//           students.Add(foundStudent);
-//         }
-//         if (queryReader != null)
-//         {
-//           queryReader.Close();
-//         }
-//       }
-      // if (conn != null)
-      // {
-      //   conn.Close();
-      // }
-//       return students;
-//     }
-//
+
     public void Delete()
-   {
-     SqlConnection conn = DB.Connection();
-     conn.Open();
-
-     SqlCommand cmd = new SqlCommand("DELETE FROM courses WHERE id = @CourseId; DELETE FROM enrollments WHERE course_id = @CourseId;", conn);
-     SqlParameter courseIdParameter = new SqlParameter();
-     courseIdParameter.ParameterName = "@CourseId";
-     courseIdParameter.Value = this.GetId();
-
-     cmd.Parameters.Add(courseIdParameter);
-     cmd.ExecuteNonQuery();
-
-     if (conn != null)
      {
-       conn.Close();
+       SqlConnection conn = DB.Connection();
+       conn.Open();
+
+       SqlCommand cmd = new SqlCommand("DELETE FROM courses WHERE id = @CourseId; DELETE FROM enrollments WHERE course_id = @CourseId;", conn);
+       SqlParameter courseIdParameter = new SqlParameter();
+       courseIdParameter.ParameterName = "@CourseId";
+       courseIdParameter.Value = this.GetId();
+
+       cmd.Parameters.Add(courseIdParameter);
+       cmd.ExecuteNonQuery();
+
+       if (conn != null)
+       {
+         conn.Close();
+       }
      }
-   }
 
     public override int GetHashCode()
     {
       return 0;
     }
-
   }
 }

@@ -139,29 +139,29 @@ namespace HardKnockRegistrar
       Assert.Equal(otherResultCourses, resultCourses);
     }
 
-//
-//     [Fact]
-//     public void Test_Delete_DeletesCourseAssociationsFromDatabase()
-//     {
-//       //Arrange
-//       Student testStudent = new Student("Mow the lawn");
-//       testStudent.Save();
-//
-//       string testName = "Home stuff";
-//       Course testCourse = new Course(testName);
-//       testCourse.Save();
-//
-//       //Act
-//       testCourse.AddStudent(testStudent);
-//       testCourse.Delete();
-//
-//       List<Course> resultStudentCourses = testStudent.GetCourses();
-//       List<Course> testStudentCourses = new List<Course> {};
-//
-//       //Assert
-//       Assert.Equal(testStudentCourses, resultStudentCourses);
-//     }
-//
+
+    [Fact]
+    public void Test_Delete_DeletesCourseEnrollmentsFromDatabase()
+    {
+      //Arrange
+      Student testStudent = new Student("Sappy Sara", new DateTime(2010, 10, 12));
+      testStudent.Save();
+
+
+      Course testCourse = new Course("Wet doggie noses", "WDN100");
+      testCourse.Save();
+
+      //Act
+      testCourse.AddEnrollment(testStudent);
+      testCourse.Delete();
+
+      List<Course> resultStudentCourses = testStudent.GetCourses();
+      List<Course> testStudentCourses = new List<Course> {};
+
+      //Assert
+      Assert.Equal(testStudentCourses, resultStudentCourses);
+    }
+
     public void Dispose()
     {
       Student.DeleteAll();

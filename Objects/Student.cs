@@ -187,29 +187,29 @@ namespace HardKnockRegistrar
     }
 
 
-  public void AddCourse(Course newCourse)
-  {
-    SqlConnection conn = DB.Connection();
-    conn.Open();
-
-    SqlCommand cmd = new SqlCommand("INSERT INTO enrollments (course_id, student_id) VALUES (@CourseId, @StudentId)", conn);
-    SqlParameter courseIdParameter = new SqlParameter();
-    courseIdParameter.ParameterName = "@CourseId";
-    courseIdParameter.Value = newCourse.GetId();
-    cmd.Parameters.Add(courseIdParameter);
-
-    SqlParameter studentIdParameter = new SqlParameter();
-    studentIdParameter.ParameterName = "@StudentId";
-    studentIdParameter.Value = this.GetId();
-    cmd.Parameters.Add(studentIdParameter);
-
-    cmd.ExecuteNonQuery();
-
-    if (conn != null)
+    public void AddCourse(Course newCourse)
     {
-      conn.Close();
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO enrollments (course_id, student_id) VALUES (@CourseId, @StudentId)", conn);
+      SqlParameter courseIdParameter = new SqlParameter();
+      courseIdParameter.ParameterName = "@CourseId";
+      courseIdParameter.Value = newCourse.GetId();
+      cmd.Parameters.Add(courseIdParameter);
+
+      SqlParameter studentIdParameter = new SqlParameter();
+      studentIdParameter.ParameterName = "@StudentId";
+      studentIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(studentIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
-  }
 
     public List<Course> GetCourses()
     {
