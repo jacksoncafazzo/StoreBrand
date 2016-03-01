@@ -1,173 +1,173 @@
-// using Xunit;
-// using System.Collections.Generic;
-// using System;
-// using System.Data;
-// using System.Data.SqlClient;
-//
-// namespace ToDoList
-// {
-//   public class CategoryTest : IDisposable
-//   {
-//     public CategoryTest()
-//     {
-//       DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=todo_test;Integrated Security=SSPI;";
-//     }
-//
+using Xunit;
+using System.Collections.Generic;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace HardKnockRegistrar
+{
+  public class CourseTest : IDisposable
+  {
+    public CourseTest()
+    {
+      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=registrar_test;Integrated Security=SSPI;";
+    }
+
+    [Fact]
+    public void Test_CoursesEmptyAtFirst()
+    {
+      //Arrange, Act
+      int result = Course.GetAll().Count;
+
+      //Assert
+      Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void Test_Equal_ReturnsTrueForSameName()
+    {
+      //Arrange, Act
+      Course firstCourse = new Course("Life of the Past: Oregon", "GEO117");
+      Course secondCourse = new Course("Life of the Past: Oregon", "GEO117");
+
+      //Assert
+      Assert.Equal(firstCourse, secondCourse);
+    }
+
 //     [Fact]
-//     public void Test_CategoriesEmptyAtFirst()
-//     {
-//       //Arrange, Act
-//       int result = Category.GetAll().Count;
-//
-//       //Assert
-//       Assert.Equal(0, result);
-//     }
-//
-//     [Fact]
-//     public void Test_Equal_ReturnsTrueForSameName()
-//     {
-//       //Arrange, Act
-//       Category firstCategory = new Category("Household Chores");
-//       Category secondCategory = new Category("Household Chores");
-//
-//       //Assert
-//       Assert.Equal(firstCategory, secondCategory);
-//     }
-//
-//     [Fact]
-//     public void Test_Save_SavesCategoryToDatabase()
+//     public void Test_Save_SavesCourseToDatabase()
 //     {
 //        //Arrange
-//        Category testCategory = new Category("Household chores");
-//        testCategory.Save();
+//        Course testCourse = new Course("Household chores");
+//        testCourse.Save();
 //
 //        //Act
-//        List<Category> result = Category.GetAll();
-//        List<Category> testList = new List<Category>{testCategory};
+//        List<Course> result = Course.GetAll();
+//        List<Course> testList = new List<Course>{testCourse};
 //
 //        //Assert
 //        Assert.Equal(testList, result);
 //     }
 //
 //     [Fact]
-//     public void Test_Save_AssignsIdToCategoryObject()
+//     public void Test_Save_AssignsIdToCourseObject()
 //     {
 //       //Arrange
-//       Category testCategory = new Category("Household chores");
-//       testCategory.Save();
+//       Course testCourse = new Course("Household chores");
+//       testCourse.Save();
 //
 //       //Act
-//       Category savedCategory = Category.GetAll()[0];
+//       Course savedCourse = Course.GetAll()[0];
 //
-//       int result = savedCategory.GetId();
-//       int testId = testCategory.GetId();
+//       int result = savedCourse.GetId();
+//       int testId = testCourse.GetId();
 //
 //       //Assert
 //       Assert.Equal(testId, result);
 //     }
 //
 //     [Fact]
-//     public void Test_Find_FindsCategoryInDatabase()
+//     public void Test_Find_FindsCourseInDatabase()
 //     {
 //       //Arrange
-//       Category testCategory = new Category("Household chores");
-//       testCategory.Save();
+//       Course testCourse = new Course("Household chores");
+//       testCourse.Save();
 //
 //       //Act
-//       Category foundCategory = Category.Find(testCategory.GetId());
+//       Course foundCourse = Course.Find(testCourse.GetId());
 //
 //       //Assert
-//       Assert.Equal(testCategory, foundCategory);
+//       Assert.Equal(testCourse, foundCourse);
 //     }
 //
 //     [Fact]
-//     public void Test_GetTasks_RetrievesAllTasksWithCategory()
+//     public void Test_GetStudents_RetrievesAllStudentsWithCourse()
 //     {
-//       Category testCategory = new Category("Household chores");
-//       testCategory.Save();
+//       Course testCourse = new Course("Household chores");
+//       testCourse.Save();
 //
-//       Task firstTask = new Task("Mow the lawn", testCategory.GetId());
-//       firstTask.Save();
-//       Task secondTask = new Task("Do the dishes", testCategory.GetId());
-//       secondTask.Save();
+//       Student firstStudent = new Student("Mow the lawn", testCourse.GetId());
+//       firstStudent.Save();
+//       Student secondStudent = new Student("Do the dishes", testCourse.GetId());
+//       secondStudent.Save();
 //
-//       List<Task> testTaskList = new List<Task> {firstTask, secondTask};
-//       List<Task> resultTaskList = testCategory.GetTasks();
+//       List<Student> testStudentList = new List<Student> {firstStudent, secondStudent};
+//       List<Student> resultStudentList = testCourse.GetStudents();
 //
-//       Assert.Equal(testTaskList, resultTaskList);
+//       Assert.Equal(testStudentList, resultStudentList);
 //     }
 //
 //     [Fact]
-//     public void Test_Delete_DeletesCategoryFromDatabase()
+//     public void Test_Delete_DeletesCourseFromDatabase()
 //     {
 //       //Arrange
 //       string name1 = "Home stuff";
-//       Category testCategory1 = new Category(name1);
-//       testCategory1.Save();
+//       Course testCourse1 = new Course(name1);
+//       testCourse1.Save();
 //
 //       string name2 = "Work stuff";
-//       Category testCategory2 = new Category(name2);
-//       testCategory2.Save();
+//       Course testCourse2 = new Course(name2);
+//       testCourse2.Save();
 //
 //       //Act
-//       testCategory1.Delete();
-//       List<Category> resultCategories = Category.GetAll();
-//       List<Category> testCategoryList = new List<Category> {testCategory2};
+//       testCourse1.Delete();
+//       List<Course> resultCourses = Course.GetAll();
+//       List<Course> testCourseList = new List<Course> {testCourse2};
 //
 //       //Assert
-//       Assert.Equal(testCategoryList, resultCategories);
+//       Assert.Equal(testCourseList, resultCourses);
 //     }
 //
 //     [Fact]
-//     public void Test_AddTask_AddsTaskToCategory()
+//     public void Test_AddStudent_AddsStudentToCourse()
 //     {
 //       //Arrange
-//       Category testCategory = new Category("Household chores");
-//       testCategory.Save();
+//       Course testCourse = new Course("Household chores");
+//       testCourse.Save();
 //
-//       Task testTask = new Task("Mow the lawn");
-//       testTask.Save();
+//       Student testStudent = new Student("Mow the lawn");
+//       testStudent.Save();
 //
-//       Task testTask2 = new Task("Water the garden");
-//       testTask2.Save();
+//       Student testStudent2 = new Student("Water the garden");
+//       testStudent2.Save();
 //
 //       //Act
-//       testCategory.AddTask(testTask);
-//       testCategory.AddTask(testTask2);
+//       testCourse.AddStudent(testStudent);
+//       testCourse.AddStudent(testStudent2);
 //
-//       List<Task> result = testCategory.GetTasks();
-//       List<Task> testList = new List<Task>{testTask, testTask2};
+//       List<Student> result = testCourse.GetStudents();
+//       List<Student> testList = new List<Student>{testStudent, testStudent2};
 //
 //       //Assert
 //       Assert.Equal(testList, result);
 //     }
 //
 //     [Fact]
-//     public void Test_Delete_DeletesCategoryAssociationsFromDatabase()
+//     public void Test_Delete_DeletesCourseAssociationsFromDatabase()
 //     {
 //       //Arrange
-//       Task testTask = new Task("Mow the lawn");
-//       testTask.Save();
+//       Student testStudent = new Student("Mow the lawn");
+//       testStudent.Save();
 //
 //       string testName = "Home stuff";
-//       Category testCategory = new Category(testName);
-//       testCategory.Save();
+//       Course testCourse = new Course(testName);
+//       testCourse.Save();
 //
 //       //Act
-//       testCategory.AddTask(testTask);
-//       testCategory.Delete();
+//       testCourse.AddStudent(testStudent);
+//       testCourse.Delete();
 //
-//       List<Category> resultTaskCategories = testTask.GetCategories();
-//       List<Category> testTaskCategories = new List<Category> {};
+//       List<Course> resultStudentCourses = testStudent.GetCourses();
+//       List<Course> testStudentCourses = new List<Course> {};
 //
 //       //Assert
-//       Assert.Equal(testTaskCategories, resultTaskCategories);
+//       Assert.Equal(testStudentCourses, resultStudentCourses);
 //     }
 //
-//     public void Dispose()
-//     {
-//       Task.DeleteAll();
-//       Category.DeleteAll();
-//     }
-//   }
-// }
+    public void Dispose()
+    {
+      Student.DeleteAll();
+      Course.DeleteAll();
+    }
+  }
+}

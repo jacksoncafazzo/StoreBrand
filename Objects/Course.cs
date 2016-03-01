@@ -4,31 +4,31 @@ using System;
 
 namespace HardKnockRegistrar
 {
-  public class Courses
+  public class Course
   {
     private int _id;
     private string _name;
     private string _course_number;
 
-    public Courses(string Name, string CourseNumber, int Id = 0)
+    public Course(string Name, string CourseNumber, int Id = 0)
     {
       _id = Id;
       _name = Name;
       _course_number = CourseNumber;
     }
 
-    public override bool Equals(System.Object otherCourses)
+    public override bool Equals(System.Object otherCourse)
     {
-      if (!(otherCourses is Courses))
+      if (!(otherCourse is Course))
       {
         return false;
       }
       else
       {
-        Courses newCourses = (Courses) otherCourses;
-        bool idEquality = this.GetId() == newCourses.GetId();
-        bool nameEquality = this.GetName() == newCourses.GetName();
-        bool numberEquality = this.GetCourseNumber() == newCourses.GetCourseNumber();
+        Course newCourse = (Course) otherCourse;
+        bool idEquality = this.GetId() == newCourse.GetId();
+        bool nameEquality = this.GetName() == newCourse.GetName();
+        bool numberEquality = this.GetCourseNumber() == newCourse.GetCourseNumber();
         return (idEquality && nameEquality && numberEquality);
       }
     }
@@ -54,9 +54,9 @@ namespace HardKnockRegistrar
       _course_number = newNumber;
     }
 
-    public static List<Courses> GetAll()
+    public static List<Course> GetAll()
     {
-      List<Courses> allCategories = new List<Courses>{};
+      List<Course> allCourses = new List<Course>{};
 
       SqlConnection conn = DB.Connection();
       SqlDataReader rdr = null;
@@ -70,8 +70,8 @@ namespace HardKnockRegistrar
         int courseId = rdr.GetInt32(0);
         string courseName = rdr.GetString(1);
         string courseNumber = rdr.GetString(2);
-        Courses newCourses = new Courses(courseName, courseNumber, courseId);
-        allCategories.Add(newCourses);
+        Course newCourse = new Course(courseName, courseNumber, courseId);
+        allCourses.Add(newCourse);
       }
 
       if (rdr != null)
@@ -83,7 +83,7 @@ namespace HardKnockRegistrar
         conn.Close();
       }
 
-      return allCategories;
+      return allCourses;
     }
 
 //     public void Save()
@@ -92,10 +92,10 @@ namespace HardKnockRegistrar
 //       SqlDataReader rdr;
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("INSERT INTO courses (name) OUTPUT INSERTED.id VALUES (@CoursesName);", conn);
+//       SqlCommand cmd = new SqlCommand("INSERT INTO courses (name) OUTPUT INSERTED.id VALUES (@CourseName);", conn);
 //
 //       SqlParameter nameParameter = new SqlParameter();
-//       nameParameter.ParameterName = "@CoursesName";
+//       nameParameter.ParameterName = "@CourseName";
 //       nameParameter.Value = this.GetName();
 //       cmd.Parameters.Add(nameParameter);
 //       rdr = cmd.ExecuteReader();
@@ -113,36 +113,36 @@ namespace HardKnockRegistrar
 //       }
 //     }
 //
-//     public static void DeleteAll()
-//     {
-//       SqlConnection conn = DB.Connection();
-//       conn.Open();
-//       SqlCommand cmd = new SqlCommand("DELETE FROM courses;", conn);
-//       cmd.ExecuteNonQuery();
-//     }
+    public static void DeleteAll()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("DELETE FROM courses;", conn);
+      cmd.ExecuteNonQuery();
+    }
 //
-//     public static Courses Find(int id)
+//     public static Course Find(int id)
 //     {
 //       SqlConnection conn = DB.Connection();
 //       SqlDataReader rdr = null;
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("SELECT * FROM courses WHERE id = @CoursesID;", conn);
-//       SqlParameter CoursesIDParemeter = new SqlParameter();
-//       CoursesIDParemeter.ParameterName = "@CoursesId";
-//       CoursesIDParemeter.Value = id.ToString();
-//       cmd.Parameters.Add(CoursesIDParemeter);
+//       SqlCommand cmd = new SqlCommand("SELECT * FROM courses WHERE id = @CourseID;", conn);
+//       SqlParameter CourseIDParemeter = new SqlParameter();
+//       CourseIDParemeter.ParameterName = "@CourseId";
+//       CourseIDParemeter.Value = id.ToString();
+//       cmd.Parameters.Add(CourseIDParemeter);
 //       rdr = cmd.ExecuteReader();
 //
-//       int foundCoursesId = 0;
-//       string foundCoursesDescription = null;
+//       int foundCourseId = 0;
+//       string foundCourseDescription = null;
 //
 //       while(rdr.Read())
 //       {
-//         foundCoursesId = rdr.GetInt32(0);
-//         foundCoursesDescription = rdr.GetString(1);
+//         foundCourseId = rdr.GetInt32(0);
+//         foundCourseDescription = rdr.GetString(1);
 //       }
-//       Courses foundCourses = new Courses(foundCoursesDescription, foundCoursesId);
+//       Course foundCourse = new Course(foundCourseDescription, foundCourseId);
 //
 //       if (rdr != null)
 //       {
@@ -152,7 +152,7 @@ namespace HardKnockRegistrar
 //       {
 //         conn.Close();
 //       }
-//       return foundCourses;
+//       return foundCourse;
 //     }
 //
 //     public List<Task> GetTasks()
@@ -161,9 +161,9 @@ namespace HardKnockRegistrar
 //       SqlDataReader rdr = null;
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("SELECT task_id FROM courses_tasks WHERE course_id = @CoursesId;", conn);
+//       SqlCommand cmd = new SqlCommand("SELECT task_id FROM courses_tasks WHERE course_id = @CourseId;", conn);
 //       SqlParameter courseIdParameter = new SqlParameter();
-//       courseIdParameter.ParameterName = "@CoursesId";
+//       courseIdParameter.ParameterName = "@CourseId";
 //       courseIdParameter.Value = this.GetId();
 //       cmd.Parameters.Add(courseIdParameter);
 //
@@ -216,9 +216,9 @@ namespace HardKnockRegistrar
 //      SqlConnection conn = DB.Connection();
 //      conn.Open();
 //
-//      SqlCommand cmd = new SqlCommand("DELETE FROM courses WHERE id = @CoursesId; DELETE FROM courses_tasks WHERE course_id = @CoursesId;", conn);
+//      SqlCommand cmd = new SqlCommand("DELETE FROM courses WHERE id = @CourseId; DELETE FROM courses_tasks WHERE course_id = @CourseId;", conn);
 //      SqlParameter courseIdParameter = new SqlParameter();
-//      courseIdParameter.ParameterName = "@CoursesId";
+//      courseIdParameter.ParameterName = "@CourseId";
 //      courseIdParameter.Value = this.GetId();
 //
 //      cmd.Parameters.Add(courseIdParameter);
@@ -235,9 +235,9 @@ namespace HardKnockRegistrar
 //       SqlConnection conn = DB.Connection();
 //       conn.Open();
 //
-//       SqlCommand cmd = new SqlCommand("INSERT INTO courses_tasks (course_id, task_id) VALUES (@CoursesId, @TaskId)", conn);
+//       SqlCommand cmd = new SqlCommand("INSERT INTO courses_tasks (course_id, task_id) VALUES (@CourseId, @TaskId)", conn);
 //       SqlParameter courseIdParameter = new SqlParameter();
-//       courseIdParameter.ParameterName = "@CoursesId";
+//       courseIdParameter.ParameterName = "@CourseId";
 //       courseIdParameter.Value = this.GetId();
 //       cmd.Parameters.Add(courseIdParameter);
 //
@@ -258,5 +258,6 @@ namespace HardKnockRegistrar
 //     {
 //       return 0;
 //     }
+
   }
 }

@@ -147,7 +147,7 @@ namespace HardKnockRegistrar
     public void Dispose()
     {
       Student.DeleteAll();
-      // Category.DeleteAll();
+      Course.DeleteAll();
     }
   }
 }
