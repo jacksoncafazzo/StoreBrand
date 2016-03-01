@@ -2,28 +2,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System;
 
-[Fact]
-    public void Test_EmptyAtFirst()
-    {
-      //Arrange, Act
-      int result = Task.GetAll().Count;
-
-      //Assert
-      Assert.Equal(0, result);
-    }
-
-    [Fact]
-    public void Test_EqualOverrideTrueForSameDescription()
-    {
-      //Arrange, Act
-      Task firstTask = new Task("Mow the lawn");
-      Task secondTask = new Task("Mow the lawn");
-
-      //Assert
-      Assert.Equal(firstTask, secondTask);
-    }
-
-    namespace ToDoList
+namespace ToDoList
 {
   public class Task
   {
@@ -38,16 +17,16 @@ using System;
 
     public override bool Equals(System.Object otherTask)
     {
-        if (!(otherTask is Task))
-        {
-          return false;
-        }
-        else {
-          Task newTask = (Task) otherTask;
-          bool idEquality = this.GetId() == newTask.GetId();
-          bool descriptionEquality = this.GetDescription() == newTask.GetDescription();
-          return (idEquality && descriptionEquality);
-        }
+      if (!(otherTask is Task))
+      {
+        return false;
+      }
+      else {
+        Task newTask = (Task) otherTask;
+        bool idEquality = this.GetId() == newTask.GetId();
+        bool descriptionEquality = this.GetDescription() == newTask.GetDescription();
+        return (idEquality && descriptionEquality);
+      }
     }
 
     public int GetId()
@@ -90,6 +69,7 @@ using System;
       }
       return AllTasks;
     }
+
     public void Save()
     {
       SqlConnection conn = DB.Connection();
@@ -167,8 +147,7 @@ using System;
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM tasks WHERE id = @TaskId;", conn);
-
+      SqlCommand cmd = new SqlCommand("DELETE FROM tasks WHERE id = @TaskId; DELETE FROM categories_tasks WHERE task_id = @TaskId;", conn);
       SqlParameter taskIdParameter = new SqlParameter();
       taskIdParameter.ParameterName = "@TaskId";
       taskIdParameter.Value = this.GetId();
@@ -180,6 +159,90 @@ using System;
       {
         conn.Close();
       }
+    }
+
+    public void AddCategory(Category newCategory)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO categories_tasks (category_id, task_id) VALUES (@CategoryId, @TaskId);", conn);
+
+      SqlParameter categoryIdParameter = new SqlParameter();
+      categoryIdParameter.ParameterName = "@CategoryId";
+      categoryIdParameter.Value = newCategory.GetId();
+      cmd.Parameters.Add(categoryIdParameter);
+
+      SqlParameter taskIdParameter = new SqlParameter();
+      taskIdParameter.ParameterName = "@TaskId";
+      taskIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(taskIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+    public List<Category> GetCategories()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT category_id FROM categories_tasks WHERE task_id = @TaskId;", conn);
+
+      SqlParameter taskIdParameter = new SqlParameter();
+      taskIdParameter.ParameterName = "@TaskId";
+      taskIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(taskIdParameter);
+
+      rdr = cmd.ExecuteReader();
+
+      List<int> categoryIds = new List<int> {};
+
+      while (rdr.Read())
+      {
+        int categoryId = rdr.GetInt32(0);
+        categoryIds.Add(categoryId);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+
+      List<Category> categories = new List<Category> {};
+
+      foreach (int categoryId in categoryIds)
+      {
+        SqlDataReader queryReader = null;
+        SqlCommand categoryQuery = new SqlCommand("SELECT * FROM categories WHERE id = @CategoryId;", conn);
+
+        SqlParameter categoryIdParameter = new SqlParameter();
+        categoryIdParameter.ParameterName = "@CategoryId";
+        categoryIdParameter.Value = categoryId;
+        categoryQuery.Parameters.Add(categoryIdParameter);
+
+        queryReader = categoryQuery.ExecuteReader();
+        while (queryReader.Read())
+        {
+          int thisCategoryId = queryReader.GetInt32(0);
+          string categoryName = queryReader.GetString(1);
+          Category foundCategory = new Category(categoryName, thisCategoryId);
+          categories.Add(foundCategory);
+        }
+        if (queryReader != null)
+        {
+          queryReader.Close();
+        }
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return categories;
     }
   }
 }
