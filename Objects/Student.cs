@@ -83,37 +83,42 @@ namespace HardKnockRegistrar
       }
       return AllStudents;
     }
-  //
-  //   public void Save()
-  //   {
-  //     SqlConnection conn = DB.Connection();
-  //     SqlDataReader rdr;
-  //     conn.Open();
-  //
-  //     SqlCommand cmd = new SqlCommand("INSERT INTO students (name) OUTPUT INSERTED.id VALUES (@StudentName)", conn);
-  //
-  //     SqlParameter nameParam = new SqlParameter();
-  //     nameParam.ParameterName = "@StudentName";
-  //     nameParam.Value = this.GetName();
-  //
-  //     cmd.Parameters.Add(nameParam);
-  //
-  //     rdr = cmd.ExecuteReader();
-  //
-  //     while(rdr.Read())
-  //     {
-  //       this._id = rdr.GetInt32(0);
-  //     }
-  //     if (rdr != null)
-  //     {
-  //       rdr.Close();
-  //     }
-  //     if (conn != null)
-  //     {
-  //       conn.Close();
-  //     }
-  //   }
-  //
+
+    public void Save()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO students (name, date_of_enrollment) OUTPUT INSERTED.id VALUES (@StudentName, @DateOfEnrollment)", conn);
+
+      SqlParameter nameParam = new SqlParameter();
+      nameParam.ParameterName = "@StudentName";
+      nameParam.Value = this.GetName();
+
+      SqlParameter dateParam = new SqlParameter();
+      dateParam.ParameterName = "@DateOfEnrollment";
+      dateParam.Value = this.GetDateOfEnrollment();
+
+      cmd.Parameters.Add(nameParam);
+      cmd.Parameters.Add(dateParam);
+
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
     public static void DeleteAll()
     {
       SqlConnection conn = DB.Connection();

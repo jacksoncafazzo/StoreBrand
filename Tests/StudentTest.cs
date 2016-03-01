@@ -34,49 +34,38 @@ namespace HardKnockRegistrar
       Assert.Equal(firstStudent, secondStudent);
     }
 
+    [Fact]
+    public void Test_Save()
+    {
+      //Arrange
+      Student testStudent = new Student("Peter Tosh", new DateTime (2012, 01, 01));
+      testStudent.Save();
 
-//     [Fact]
-//     public void Test_EmptyAtFirst()
-//     {
-//       //Arrange, Act
-//       int result = Student.GetAll().Count;
-//
-//       //Assert
-//       Assert.Equal(0, result);
-//     }
-//
-//     [Fact]
-//     public void Test_Save()
-//     {
-//       //Arrange
-//       Student testStudent = new Student("Mow the lawn");
-//       testStudent.Save();
-//
-//       //Act
-//       List<Student> result = Student.GetAll();
-//       List<Student> testList = new List<Student>{testStudent};
-//
-//       //Assert
-//       Assert.Equal(testList, result);
-//     }
-//
-//     [Fact]
-//     public void Test_SaveAssignsIdToObject()
-//     {
-//       //Arrange
-//       Student testStudent = new Student("Mow the lawn");
-//       testStudent.Save();
-//
-//       //Act
-//       Student savedStudent = Student.GetAll()[0];
-//
-//       int result = savedStudent.GetId();
-//       int testId = testStudent.GetId();
-//
-//       //Assert
-//       Assert.Equal(testId, result);
-//     }
-//
+      //Act
+      List<Student> result = Student.GetAll();
+      List<Student> testList = new List<Student>{testStudent};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void Test_SaveAssignsIdToObject()
+    {
+      //Arrange
+      Student testStudent = new Student("Bill Clinton", new DateTime (2016, 01, 01));
+      testStudent.Save();
+
+      //Act
+      Student savedStudent = Student.GetAll()[0];
+
+      int result = savedStudent.GetId();
+      int testId = testStudent.GetId();
+
+      //Assert
+      Assert.Equal(testId, result);
+    }
+
 //     [Fact]
 //     public void Test_FindFindsStudentInDatabase()
 //     {
