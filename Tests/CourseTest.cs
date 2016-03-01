@@ -34,20 +34,20 @@ namespace HardKnockRegistrar
       Assert.Equal(firstCourse, secondCourse);
     }
 
-//     [Fact]
-//     public void Test_Save_SavesCourseToDatabase()
-//     {
-//        //Arrange
-//        Course testCourse = new Course("Household chores");
-//        testCourse.Save();
-//
-//        //Act
-//        List<Course> result = Course.GetAll();
-//        List<Course> testList = new List<Course>{testCourse};
-//
-//        //Assert
-//        Assert.Equal(testList, result);
-//     }
+    [Fact]
+    public void Test_Save_SavesCourseToDatabase()
+    {
+       //Arrange
+       Course testCourse = new Course("Linguistical Problem Solving Programs", "LING324");
+       testCourse.Save();
+
+       //Act
+       List<Course> result = Course.GetAll();
+       List<Course> testList = new List<Course>{testCourse};
+
+       //Assert
+       Assert.Equal(testList, result);
+    }
 //
 //     [Fact]
 //     public void Test_Save_AssignsIdToCourseObject()
