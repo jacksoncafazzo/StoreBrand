@@ -49,37 +49,37 @@ namespace HardKnockRegistrar
        Assert.Equal(testList, result);
     }
 //
-//     [Fact]
-//     public void Test_Save_AssignsIdToCourseObject()
-//     {
-//       //Arrange
-//       Course testCourse = new Course("Household chores");
-//       testCourse.Save();
-//
-//       //Act
-//       Course savedCourse = Course.GetAll()[0];
-//
-//       int result = savedCourse.GetId();
-//       int testId = testCourse.GetId();
-//
-//       //Assert
-//       Assert.Equal(testId, result);
-//     }
-//
-//     [Fact]
-//     public void Test_Find_FindsCourseInDatabase()
-//     {
-//       //Arrange
-//       Course testCourse = new Course("Household chores");
-//       testCourse.Save();
-//
-//       //Act
-//       Course foundCourse = Course.Find(testCourse.GetId());
-//
-//       //Assert
-//       Assert.Equal(testCourse, foundCourse);
-//     }
-//
+    [Fact]
+    public void Test_Save_AssignsIdToCourseObject()
+    {
+      //Arrange
+      Course testCourse = new Course("Enterin' SQL Commands", "CS145");
+      testCourse.Save();
+
+      //Act
+      Course savedCourse = Course.GetAll()[0];
+
+      int result = savedCourse.GetId();
+      int testId = testCourse.GetId();
+
+      //Assert
+      Assert.Equal(testId, result);
+    }
+
+    [Fact]
+    public void Test_Find_FindsCourseInDatabase()
+    {
+      //Arrange
+      Course testCourse = new Course("Screwin' Up Da'bases With Chris", "SUD399");
+      testCourse.Save();
+
+      //Act
+      Course foundCourse = Course.Find(testCourse.GetId());
+
+      //Assert
+      Assert.Equal(testCourse, foundCourse);
+    }
+
 //     [Fact]
 //     public void Test_GetStudents_RetrievesAllStudentsWithCourse()
 //     {

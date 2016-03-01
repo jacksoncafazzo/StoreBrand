@@ -126,41 +126,43 @@ namespace HardKnockRegistrar
       SqlCommand cmd = new SqlCommand("DELETE FROM courses;", conn);
       cmd.ExecuteNonQuery();
     }
-//
-//     public static Course Find(int id)
-//     {
-//       SqlConnection conn = DB.Connection();
-//       SqlDataReader rdr = null;
-//       conn.Open();
-//
-//       SqlCommand cmd = new SqlCommand("SELECT * FROM courses WHERE id = @CourseID;", conn);
-//       SqlParameter CourseIDParemeter = new SqlParameter();
-//       CourseIDParemeter.ParameterName = "@CourseId";
-//       CourseIDParemeter.Value = id.ToString();
-//       cmd.Parameters.Add(CourseIDParemeter);
-//       rdr = cmd.ExecuteReader();
-//
-//       int foundCourseId = 0;
-//       string foundCourseDescription = null;
-//
-//       while(rdr.Read())
-//       {
-//         foundCourseId = rdr.GetInt32(0);
-//         foundCourseDescription = rdr.GetString(1);
-//       }
-//       Course foundCourse = new Course(foundCourseDescription, foundCourseId);
-//
-//       if (rdr != null)
-//       {
-//         rdr.Close();
-//       }
-//       if (conn != null)
-//       {
-//         conn.Close();
-//       }
-//       return foundCourse;
-//     }
-//
+
+    public static Course Find(int id)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM courses WHERE id = @CourseID;", conn);
+      SqlParameter CourseIDParemeter = new SqlParameter();
+      CourseIDParemeter.ParameterName = "@CourseId";
+      CourseIDParemeter.Value = id.ToString();
+      cmd.Parameters.Add(CourseIDParemeter);
+      rdr = cmd.ExecuteReader();
+
+      int foundCourseId = 0;
+      string foundCourseName = null;
+      string foundCourseNumber = null;
+
+      while(rdr.Read())
+      {
+        foundCourseId = rdr.GetInt32(0);
+        foundCourseName = rdr.GetString(1);
+        foundCourseNumber = rdr.GetString(2);
+      }
+      Course foundCourse = new Course(foundCourseName, foundCourseNumber, foundCourseId);
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return foundCourse;
+    }
+
 //     public List<Task> GetTasks()
 //     {
 //       SqlConnection conn = DB.Connection();
