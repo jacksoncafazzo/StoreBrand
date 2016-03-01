@@ -217,7 +217,7 @@ namespace HardKnockRegistrar
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT course_id FROM enrollments WHERE student_id = @StudentId;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT courses.* FROM students JOIN enrollments ON (students.id = enrollments.student_id) JOIN courses ON (enrollments.course_id = courses.id) WHERE students.id = @StudentId", conn);
 
       SqlParameter studentIdParameter = new SqlParameter();
       studentIdParameter.ParameterName = "@StudentId";
@@ -226,49 +226,56 @@ namespace HardKnockRegistrar
 
       rdr = cmd.ExecuteReader();
 
-      List<int> courseIds = new List<int> {};
+      List<Course> courses = new List<Course> {};
+      int courseId = 0;
+      string courseName = null;
+      string courseNumber = null;
+
       while (rdr.Read())
       {
-        int courseId = rdr.GetInt32(0);
-        courseIds.Add(courseId);
+        courseId = rdr.GetInt32(0);
+        courseName = rdr.GetString(1);
+        courseNumber = rdr.GetString(2);
+        Course course = new Course(courseName, courseNumber, courseId);
+        courses.Add(course);
       }
       if (rdr != null)
       {
         rdr.Close();
       }
 
-      List<Course> courses = new List<Course> {};
-
-      foreach (int courseId in courseIds)
-      {
-        SqlDataReader queryReader = null;
-        SqlCommand courseQuery = new SqlCommand("SELECT * FROM courses WHERE id = @CourseId;", conn);
-
-        SqlParameter courseIdParameter = new SqlParameter();
-        courseIdParameter.ParameterName = "@CourseId";
-        courseIdParameter.Value = courseId;
-        courseQuery.Parameters.Add(courseIdParameter);
-
-        queryReader = courseQuery.ExecuteReader();
-        while (queryReader.Read())
-        {
-          int thisCourseId = queryReader.GetInt32(0);
-          string courseName = queryReader.GetString(1);
-          string courseNumber = queryReader.GetString(2);
-          Course foundCourse = new Course(courseName, courseNumber, thisCourseId);
-          courses.Add(foundCourse);
-        }
-
-        if (queryReader != null)
-        {
-          queryReader.Close();
-        }
-      }
-
-      if (conn != null)
-      {
-        conn.Close();
-      }
+      // List<Course> courses = new List<Course> {};
+      //
+      // foreach (int courseId in courseIds)
+      // {
+      //   SqlDataReader queryReader = null;
+      //   SqlCommand courseQuery = new SqlCommand("SELECT * FROM courses WHERE id = @CourseId;", conn);
+      //
+      //   SqlParameter courseIdParameter = new SqlParameter();
+      //   courseIdParameter.ParameterName = "@CourseId";
+      //   courseIdParameter.Value = courseId;
+      //   courseQuery.Parameters.Add(courseIdParameter);
+      //
+      //   queryReader = courseQuery.ExecuteReader();
+      //   while (queryReader.Read())
+      //   {
+      //     int thisCourseId = queryReader.GetInt32(0);
+      //     string courseName = queryReader.GetString(1);
+      //     string courseNumber = queryReader.GetString(2);
+      //     Course foundCourse = new Course(courseName, courseNumber, thisCourseId);
+      //     courses.Add(foundCourse);
+      //   }
+      //
+      //   if (queryReader != null)
+      //   {
+      //     queryReader.Close();
+      //   }
+      // }
+      //
+      // if (conn != null)
+      // {
+      //   conn.Close();
+      // }
 
       return courses;
     }
