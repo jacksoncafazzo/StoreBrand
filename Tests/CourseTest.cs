@@ -123,27 +123,21 @@ namespace HardKnockRegistrar
 
       Assert.Equal(testStudentList, resultStudentList);
     }
-// //
-//     [Fact]
-//     public void Test_Delete_DeletesCourseFromDatabase()
-//     {
-//       //Arrange
-//       string name1 = "Home stuff";
-//       Course testCourse1 = new Course(name1);
-//       testCourse1.Save();
-//
-//       string name2 = "Work stuff";
-//       Course testCourse2 = new Course(name2);
-//       testCourse2.Save();
-//
-//       //Act
-//       testCourse1.Delete();
-//       List<Course> resultCourses = Course.GetAll();
-//       List<Course> testCourseList = new List<Course> {testCourse2};
-//
-//       //Assert
-//       Assert.Equal(testCourseList, resultCourses);
-//     }
+
+    [Fact]
+    public void Test_Delete_DeletesCourseFromDatabase()
+    {
+      List<Course> resultCourses = Course.GetAll();
+      //Arrange
+      Course testCourse = new Course("Best Course EVAH", "BCE500");
+      testCourse.Save();
+      testCourse.Delete();
+
+      List<Course> otherResultCourses = Course.GetAll();
+
+      //Assert
+      Assert.Equal(otherResultCourses, resultCourses);
+    }
 //
 //     [Fact]
 //     public void Test_AddStudent_AddsStudentToCourse()
