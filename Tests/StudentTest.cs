@@ -80,48 +80,49 @@ namespace HardKnockRegistrar
       Assert.Equal(testStudent, result);
     }
 
-//     [Fact]
-//     public void Test_AddCategory_AddsCategoryToStudent()
-//     {
-//       //Arrange
-//       Student testStudent = new Student("Mow the lawn");
-//       testStudent.Save();
-//
-//       Category testCategory = new Category("Home stuff");
-//       testCategory.Save();
-//
-//       //Act
-//       testStudent.AddCategory(testCategory);
-//
-//       List<Category> result = testStudent.GetCategories();
-//       List<Category> testList = new List<Category>{testCategory};
-//
-//       //Assert
-//       Assert.Equal(testList, result);
-//     }
-//
-// //     [Fact]
-//     public void Test_GetCategories_ReturnsAllStudentCategories()
-//     {
-//       //Arrange
-//       Student testStudent = new Student("Mow the lawn");
-//       testStudent.Save();
-//
-//       Category testCategory1 = new Category("Home stuff");
-//       testCategory1.Save();
-//
-//       Category testCategory2 = new Category("Work stuff");
-//       testCategory2.Save();
-//
-//       //Act
-//       testStudent.AddCategory(testCategory1);
-//       List<Category> result = testStudent.GetCategories();
-//       List<Category> testList = new List<Category> {testCategory1};
-//
-//       //Assert
-//       Assert.Equal(testList, result);
-//     }
-//
+    [Fact]
+    public void Test_AddCourse_AddsCourseToStudent()
+    {
+      //Arrange
+      Course testCourse = new Course("Evening TV", "NBC211");
+      testCourse.Save();
+
+      Student testStudent = new Student("Brian Griffin", new DateTime (2016, 01, 01));
+      testStudent.Save();
+
+      //Act
+      testStudent.AddCourse(testCourse);
+
+      List<Course> result = testStudent.GetCourses();
+      List<Course> testList = new List<Course>{testCourse};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void Test_GetCourses_ReturnsAllStudentCourses()
+    {
+      //Arrange
+      Student testStudent = new Student("Mr. Ed", new DateTime(2054, 10, 12));
+      testStudent.Save();
+
+      Course testCourse1 = new Course("Mr. Magoo - Into the 22nd Century", "FMG240");
+      testCourse1.Save();
+
+      Course testCourse2 = new Course("Dreaming With Genie", "DJI300");
+      testCourse2.Save();
+
+      //Act
+      testStudent.AddCourse(testCourse1);
+      testStudent.AddCourse(testCourse2);
+      List<Course> result = testStudent.GetCourses();
+      List<Course> testList = new List<Course> {testCourse1, testCourse2};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+
 //     [Fact]
 //     public void Test_Delete_DeletesStudentAssociationsFromDatabase()
 //     {

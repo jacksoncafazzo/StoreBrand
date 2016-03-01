@@ -282,35 +282,11 @@ namespace HardKnockRegistrar
        conn.Close();
      }
    }
-//
-//     public void AddStudent(Student newStudent)
-//     {
-//       SqlConnection conn = DB.Connection();
-//       conn.Open();
-//
-//       SqlCommand cmd = new SqlCommand("INSERT INTO courses_students (course_id, student_id) VALUES (@CourseId, @StudentId)", conn);
-//       SqlParameter courseIdParameter = new SqlParameter();
-//       courseIdParameter.ParameterName = "@CourseId";
-//       courseIdParameter.Value = this.GetId();
-//       cmd.Parameters.Add(courseIdParameter);
-//
-//       SqlParameter studentIdParameter = new SqlParameter();
-//       studentIdParameter.ParameterName = "@StudentId";
-//       studentIdParameter.Value = newStudent.GetId();
-//       cmd.Parameters.Add(studentIdParameter);
-//
-//       cmd.ExecuteNonQuery();
-//
-//       if (conn != null)
-//       {
-//         conn.Close();
-//       }
-//     }
-//
-//     public override int GetHashCode()
-//     {
-//       return 0;
-//     }
+
+    public override int GetHashCode()
+    {
+      return 0;
+    }
 
   }
 }
