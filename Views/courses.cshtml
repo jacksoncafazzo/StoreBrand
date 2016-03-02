@@ -6,15 +6,14 @@
     <ul>
     @foreach (var course in Model)
     {
-      <li><a href="/courses/@CourseName.GetId()">@courseName.GetName()</a> </li>
-      <li><a href="/courses/@@CourseNumber.GetId()">@courseNumber.GetName()</a> </li>
+      <li><a href="/courses/@course.GetId()">@course.GetName()</a>: @course.GetCourseNumber()</li>
     }
     </ul>
 
   }
   else
   {
-    <h1>No courses to be found</h1>
+    <h3>No courses to be found</h3>
   }
 
 <form action="/courses/delete" method="post">

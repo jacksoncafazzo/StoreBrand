@@ -6,15 +6,14 @@
     <ul>
     @foreach (var student in Model)
     {
-      <li><a href="/students/@studentName.GetId()">@studentName.GetName()</a> </li>
-      <li><a href="/students/@dateOfEnrollment.GetId()">@dateOfEnrollment.GetName()</a> </li>
+      <li><a href="/students/@student.GetId()">@student.GetName()</a> @student.GetDateOfEnrollment().ToString("MM/dd/yyyy")</li>
     }
     </ul>
 
   }
   else
   {
-    <h1>No students to be found</h1>
+    <h3>No students to be found</h3>
   }
 
 <form action="/students/delete" method="post">
