@@ -5,7 +5,7 @@ using Nancy;
 using Nancy.ViewEngines.Razor;
 using System.Collections.Generic;
 
-namespace HardKnockRegistrar
+namespace LibraryCatalog
 {
   public class Startup
   {
@@ -41,6 +41,6 @@ namespace HardKnockRegistrar
 
   public static class DBConfiguration
     {
-        public static string ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=registrar;Integrated Security=SSPI;";
+        public static string ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=library;Integrated Security=SSPI;";
     }
 }

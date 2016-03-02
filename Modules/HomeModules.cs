@@ -1,7 +1,7 @@
 using Nancy;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-namespace HardKnockRegistrar
+namespace LibraryCatalog
 {
   public class HomeModule : NancyModule
   {
@@ -11,36 +11,36 @@ namespace HardKnockRegistrar
         return View["index.cshtml"];
       };
 
-      Get["/students"] = _ => {
-        List<Student> AllStudents = Student.GetAll();
-        return View["students.cshtml", AllStudents];
+      Get["/authors"] = _ => {
+        List<Author> AllAuthors = Author.GetAll();
+        return View["authors.cshtml", AllAuthors];
       };
 
-      Get["/courses"] = _ => {
-        List<Course> AllCourses = Course.GetAll();
-        return View["courses.cshtml", AllCourses];
+      Get["/books"] = _ => {
+        List<Book> AllBooks = Book.GetAll();
+        return View["books.cshtml", AllBooks];
       };
 
-      Get["/students/new"] = _ => {
-        return View["students_form.cshtml"];
+      Get["/authors/new"] = _ => {
+        return View["authors_form.cshtml"];
       };
 
-      Post["/students/new"] = _ => {
-        Student newStudent = new Student(Request.Form["student-name"], Request.Form["enrollment-date"]);
-        newStudent.Save();
-        List<Student> AllStudents = Student.GetAll();
-        return View["students.cshtml", AllStudents];
+      Post["/authors/new"] = _ => {
+        Author newAuthor = new Author(Request.Form["author-name"], Request.Form["book-author"]);
+        newAuthor.Save();
+        List<Author> AllAuthors = Author.GetAll();
+        return View["authors.cshtml", AllAuthors];
       };
 
-      Get["/courses/new"] = _ => {
-        return View["courses_form.cshtml"];
+      Get["/books/new"] = _ => {
+        return View["books_form.cshtml"];
       };
 
-      Post["/courses/new"] = _ => {
-        Course newCourse = new Course(Request.Form["course-name"], Request.Form["course-number"]);
-        newCourse.Save();
-        List<Course> AllCourses = Course.GetAll();
-        return View["courses.cshtml", AllCourses];
+      Post["/books/new"] = _ => {
+        Book newBook = new Book(Request.Form["book-name"], Request.Form["book-number"]);
+        newBook.Save();
+        List<Book> AllBooks = Book.GetAll();
+        return View["books.cshtml", AllBooks];
       };
 
 
