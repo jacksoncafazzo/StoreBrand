@@ -1,21 +1,21 @@
 <h1>Library Catalog</h1>
 <h3>List of Authors:</h3>
 <hr />
-@if (Model.Count != 0)
+@{
+  if (Model != null)
   {
     <ul>
     @foreach (var author in Model)
     {
-      <li><a href="/authors/@author.GetId()">@author.GetName()</a>
-      <li>For more info visit their site: <a href="http://@author.GetUrl()">@author.GetUrl()</a></li>
+    <li><a href="/authors/@author.GetId()">@author.GetFirstName() @author.GetLastName()</a></li>
     }
     </ul>
-
   }
   else
   {
-    <h3>No authors to be found</h3>
+  <h3>No authors to be found</h3>
   }
+}
 
 <form action="/authors/delete" method="post">
  <button type="submit" name="button">Delete all authors</button>

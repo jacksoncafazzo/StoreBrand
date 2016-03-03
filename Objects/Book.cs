@@ -8,13 +8,13 @@ namespace LibraryCatalog
   {
     private int _id;
     private string _title;
-    private DateTime _due_date;
+    private DateTime _publish_date;
 
-    public Book(string Title, DateTime DueDate, int Id = 0)
+    public Book(string Title, DateTime PublishDate, int Id = 0)
     {
       _id = Id;
       _title = Title;
-      _due_date = DueDate;
+      _publish_date = PublishDate;
     }
 
     public override bool Equals(System.Object otherBook)
@@ -28,8 +28,8 @@ namespace LibraryCatalog
         Book newBook = (Book) otherBook;
         bool idEquality = this.GetId() == newBook.GetId();
         bool titleEquality = this.GetTitle() == newBook.GetTitle();
-        bool dueDateEquality = this.GetDueDate() == newBook.GetDueDate();
-        return (idEquality && titleEquality && dueDateEquality);
+        bool publishDateEquality = this.GetPublishDate() == newBook.GetPublishDate();
+        return (idEquality && titleEquality && publishDateEquality);
       }
     }
 
@@ -45,13 +45,13 @@ namespace LibraryCatalog
     {
       _title = newTitle;
     }
-    public string GetDueDate()
+    public DateTime GetPublishDate()
     {
-      return _due_date;
+      return _publish_date;
     }
-    public void SetDueDate(string newNumber)
+    public void SetPublishDate(DateTime newNumber)
     {
-      _due_date = newNumber;
+      _publish_date = newNumber;
     }
 
     public static List<Book> GetAll()
@@ -69,8 +69,8 @@ namespace LibraryCatalog
       {
         int bookId = rdr.GetInt32(0);
         string bookTitle = rdr.GetString(1);
-        string bookNumber = rdr.GetString(2);
-        Book newBook = new Book(bookTitle, bookNumber, bookId);
+        DateTime PublishDate = rdr.GetDateTime(2);
+        Book newBook = new Book(bookTitle, PublishDate, bookId);
         allBooks.Add(newBook);
       }
 
@@ -92,17 +92,17 @@ namespace LibraryCatalog
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO books (title, due_date) OUTPUT INSERTED.id VALUES (@BookName, @DueDate); INSERT INTO book_author (book_id) OUTPUT INSERTED.id VALUES (@BookId)", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO books (title, publish_date) OUTPUT INSERTED.id VALUES (@BookTitle, @PublishDate); INSERT INTO book_author (book_id) OUTPUT INSERTED.id VALUES (@BookId)", conn);
 
       SqlParameter titleParameter = new SqlParameter();
-      titleParameter.ParameterName = "@BookName";
-      titleParameter.Value = this.GetName();
+      titleParameter.ParameterName = "@BookTitle";
+      titleParameter.Value = this.GetTitle();
       cmd.Parameters.Add(titleParameter);
 
-      SqlParameter dueDateParameter = new SqlParameter();
-      dueDateParameter.ParameterName = "@DueDate";
-      dueDateParameter.Value = this.GetDueDate();
-      cmd.Parameters.Add(dueDateParameter);
+      SqlParameter publishDateParameter = new SqlParameter();
+      publishDateParameter.ParameterName = "@PublishDate";
+      publishDateParameter.Value = this.GetPublishDate();
+      cmd.Parameters.Add(publishDateParameter);
 
       SqlParameter bookIdParameter = new SqlParameter();
       bookIdParameter.ParameterName = "@BookId";
@@ -147,15 +147,15 @@ namespace LibraryCatalog
 
       int foundBookId = 0;
       string foundBookTitle = null;
-      string foundDueDate = null;
+      DateTime foundPublishDate = new DateTime(2000,1,1);
 
       while(rdr.Read())
       {
         foundBookId = rdr.GetInt32(0);
         foundBookTitle = rdr.GetString(1);
-        foundDueDate = rdr.GetString(2);
+        foundPublishDate = rdr.GetDateTime(2);
       }
-      Book foundBook = new Book(foundBookTitle, foundDueDate, foundBookId);
+      Book foundBook = new Book(foundBookTitle, foundPublishDate, foundBookId);
 
       if (rdr != null)
       {
@@ -209,15 +209,15 @@ namespace LibraryCatalog
 
       List<Author> authors = new List<Author> {};
       int authorId = 0;
-      string authorName = null;
-      DateTime authorDate = new DateTime(2016, 01, 01);
+      string authorFirstName = null;
+      string authorLastName = null;
 
       while(rdr.Read())
       {
         authorId = rdr.GetInt32(0);
-        authorName = rdr.GetString(1);
-        authorDate = rdr.GetDateTime(2);
-        Author author = new Author(authorName, authorDate, authorId);
+        authorFirstName = rdr.GetString(1);
+        authorLastName = rdr.GetString(2);
+        Author author = new Author(authorFirstName, authorLastName, authorId);
         authors.Add(author);
       }
 
@@ -256,5 +256,6 @@ namespace LibraryCatalog
     {
       return 0;
     }
+
   }
 }

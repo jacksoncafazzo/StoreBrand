@@ -10,7 +10,7 @@ namespace LibraryCatalog
   {
     public BookTest()
     {
-      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=registrar_test;Integrated Security=SSPI;";
+      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=library_test;Integrated Security=SSPI;";
     }
 
     [Fact]
@@ -27,8 +27,8 @@ namespace LibraryCatalog
     public void Equal_ReturnsTrueForSameName()
     {
       //Arrange, Act
-      Book firstBook = new Book("Life of the Past: Oregon", new DateTime(3,2,2013);
-      Book secondBook = new Book("Life of the Past: Oregon", new DateTime(3,2,2013);
+      Book firstBook = new Book("Life of the Past: Oregon", new DateTime(2013,2,12));
+      Book secondBook = new Book("Life of the Past: Oregon", new DateTime(2013,2,12));
 
       //Assert
       Assert.Equal(firstBook, secondBook);
@@ -38,7 +38,7 @@ namespace LibraryCatalog
     public void Save_SavesBookToDatabase()
     {
        //Arrange
-       Book testBook = new Book("Linguistical Problem Solving Programs", new DateTime(4,20,2013));
+       Book testBook = new Book("Linguistical Problem Solving Programs", new DateTime(2011,9,10));
        testBook.Save();
 
        //Act
@@ -53,7 +53,7 @@ namespace LibraryCatalog
     public void Save_AssignsIdToBookObject()
     {
       //Arrange
-      Book testBook = new Book("Enterin' SQL Commands", new DateTime(5,7,2012));
+      Book testBook = new Book("Enterin' SQL Commands", new DateTime(2012,2,5));
       testBook.Save();
 
       //Act
@@ -70,7 +70,7 @@ namespace LibraryCatalog
     public void Find_FindsBookInDatabase()
     {
       //Arrange
-      Book testBook = new Book("Screwin' Up Da'bases With Chris", new DateTime(6,6,2011));
+      Book testBook = new Book("Screwin' Up Da'bases With Chris", new DateTime(2011,6,3));
       testBook.Save();
 
       //Act
@@ -85,7 +85,7 @@ namespace LibraryCatalog
     {
       List<Book> resultBooks = Book.GetAll();
       //Arrange
-      Book testBook = new Book("Best Book EVAH", new DateTime(11,6,2015));
+      Book testBook = new Book("Best Book EVAH", new DateTime(2015,5,2));
       testBook.Save();
       testBook.Delete();
 
@@ -99,15 +99,15 @@ namespace LibraryCatalog
     public void Delete_DeletesBookBookAndAuthorsFromDatabase()
     {
       //Arrange
-      Author testAuthor = new Author("Perilous Dungeons", new DateTime()));
+      Author testAuthor = new Author("Perilous Dungeons", "sdlfk");
       testAuthor.Save();
 
 
-      Book testBook = new Book("Wet doggie noses", new DateTime(5,12,1987));
+      Book testBook = new Book("Wet doggie noses", new DateTime(1987,12,12));
       testBook.Save();
 
       //Act
-      testBook.AddAuthorToBook(testAuthor);
+      testBook.AddBookAuthor(testAuthor);
       testBook.Delete();
 
       List<Book> resultAuthorBooks = testAuthor.GetBooks();
@@ -119,7 +119,7 @@ namespace LibraryCatalog
 
 
     [Fact]
-    public void AddAuthorToBook_AddsAuthorToBook()
+    public void AddBookAuthor_AddsAuthorToBook()
     {
       //Arrange
       Book testBook = new Book("David Copperfield", new DateTime(2014, 01, 01));
@@ -132,8 +132,8 @@ namespace LibraryCatalog
       testAuthor2.Save();
 
       //Act
-      testBook.AddAuthorToBook(testAuthor);
-      testBook.AddAuthorToBook(testAuthor2);
+      testBook.AddBookAuthor(testAuthor);
+      testBook.AddBookAuthor(testAuthor2);
 
       List<Author> result = testBook.GetAuthors();
       List<Author> testList = new List<Author>{testAuthor, testAuthor2};
@@ -145,16 +145,16 @@ namespace LibraryCatalog
     [Fact]
     public void GetAuthors_RetrievesAllAuthorsWithBook()
     {
-      Book testBook = new Book("How It Be", DateTime(2016, 03, 13));
+      Book testBook = new Book("How It Be", new DateTime(2016, 03, 13));
       testBook.Save();
 
       Author firstAuthor = new Author("Pippi Longstocking", "sunnydays.vi.ca");
       firstAuthor.Save();
-      testBook.AddAuthorToBook(firstAuthor);
+      testBook.AddBookAuthor(firstAuthor);
 
       Author secondAuthor = new Author("Matilda", "blah.com");
       secondAuthor.Save();
-      testBook.AddAuthorToBook(secondAuthor);
+      testBook.AddBookAuthor(secondAuthor);
 
       List<Author> testAuthorList = new List<Author> {firstAuthor, secondAuthor};
       List<Author> resultAuthorList = testBook.GetAuthors();

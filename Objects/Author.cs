@@ -7,14 +7,14 @@ namespace LibraryCatalog
   public class Author
   {
     private int _id;
-    private string _name;
-    private string _url;
+    private string _firstName;
+    private string _lastName;
 
-    public Author(string Name, string Url, int Id = 0)
+    public Author(string FirstName, string LastName, int Id = 0)
     {
       _id = Id;
-      _name = Name;
-      _url = Url;
+      _firstName = FirstName;
+      _lastName = LastName;
     }
 
     public override bool Equals(System.Object otherAuthor)
@@ -26,10 +26,10 @@ namespace LibraryCatalog
       else {
         Author newAuthor = (Author) otherAuthor;
         bool IdEquality = this.GetId() == newAuthor.GetId();
-        bool NameEquality = this.GetName() == newAuthor.GetName();
-        bool UrlEquality = this.GetUrl() == newAuthor.GetUrl();
+        bool FirstNameEquality = this.GetFirstName() == newAuthor.GetFirstName();
+        bool LastNameEquality = this.GetLastName() == newAuthor.GetLastName();
 
-        return (IdEquality && NameEquality && UrlEquality);
+        return (IdEquality && FirstNameEquality && LastNameEquality);
       }
     }
 
@@ -37,21 +37,21 @@ namespace LibraryCatalog
     {
       return _id;
     }
-    public string GetName()
+    public string GetFirstName()
     {
-      return _name;
+      return _firstName;
     }
     public void SetName(string newName)
     {
-      _name = newName;
+      _firstName = newName;
     }
-    public String GetUrl()
+    public String GetLastName()
     {
-      return _url;
+      return _lastName;
     }
-    public void SetUrl(string newUrl)
+    public void SetLastName(string newLastName)
     {
-      _url = newUrl;
+      _lastName = newLastName;
     }
 
     public static List<Author> GetAll()
@@ -68,9 +68,9 @@ namespace LibraryCatalog
       while(rdr.Read())
       {
         int AuthorId = rdr.GetInt32(0);
-        string AuthorName = rdr.GetString(1);
-        string AuthorUrl = rdr.GetString(2);
-        Author NewAuthor = new Author(AuthorName, AuthorUrl, AuthorId);
+        string AuthorFirstName = rdr.GetString(1);
+        string AuthorLastName = rdr.GetString(2);
+        Author NewAuthor = new Author(AuthorFirstName, AuthorLastName, AuthorId);
         AllAuthors.Add(NewAuthor);
       }
       if (rdr != null)
@@ -90,17 +90,17 @@ namespace LibraryCatalog
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO authors (name, url) OUTPUT INSERTED.id VALUES (@AuthorName, @Url); INSERT INTO book_authors (author_id) OUTPUT INSERTED.id VALUES (@AuthorId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO authors (firstname, lastname) OUTPUT INSERTED.id VALUES (@FirstName, @LastName); INSERT INTO book_author (author_id) OUTPUT INSERTED.id VALUES (@AuthorId);", conn);
 
-      SqlParameter nameParam = new SqlParameter();
-      nameParam.ParameterName = "@AuthorName";
-      nameParam.Value = this.GetName();
-      cmd.Parameters.Add(nameParam);
+      SqlParameter firstNameParam = new SqlParameter();
+      firstNameParam.ParameterName = "@FirstName";
+      firstNameParam.Value = this.GetFirstName();
+      cmd.Parameters.Add(firstNameParam);
 
-      SqlParameter dateParam = new SqlParameter();
-      dateParam.ParameterName = "@Url";
-      dateParam.Value = this.GetUrl();
-      cmd.Parameters.Add(dateParam);
+      SqlParameter lastNameParam = new SqlParameter();
+      lastNameParam.ParameterName = "@LastName";
+      lastNameParam.Value = this.GetLastName();
+      cmd.Parameters.Add(lastNameParam);
 
       SqlParameter authorIdParam = new SqlParameter();
       authorIdParam.ParameterName = "@AuthorId";
@@ -145,16 +145,16 @@ namespace LibraryCatalog
       rdr = cmd.ExecuteReader();
 
       int foundAuthorId = 0;
-      string foundAuthorName = null;
-      string foundUrl = null;
+      string foundFirstName = null;
+      string foundLastName = null;
 
       while(rdr.Read())
       {
         foundAuthorId = rdr.GetInt32(0);
-        foundAuthorName = rdr.GetString(1);
-        foundUrl = rdr.GetString(2);
+        foundFirstName = rdr.GetString(1);
+        foundLastName = rdr.GetString(2);
       }
-      Author foundAuthor = new Author(foundAuthorName, foundUrl, foundAuthorId);
+      Author foundAuthor = new Author(foundFirstName, foundLastName, foundAuthorId);
 
       if (rdr != null)
       {
@@ -172,7 +172,7 @@ namespace LibraryCatalog
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM authors WHERE id = @AuthorId; DELETE FROM book_authors WHERE author_id = @AuthorId;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM authors WHERE id = @AuthorId; DELETE FROM book_author WHERE author_id = @AuthorId;", conn);
       SqlParameter authorIdParameter = new SqlParameter();
       authorIdParameter.ParameterName = "@AuthorId";
       authorIdParameter.Value = this.GetId();
@@ -191,7 +191,7 @@ namespace LibraryCatalog
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO book_authors (book_id, author_id) VALUES (@BookId, @AuthorId)", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO book_author (book_id, author_id) VALUES (@BookId, @AuthorId)", conn);  //needs more stuff - book relationship
       SqlParameter bookIdParameter = new SqlParameter();
       bookIdParameter.ParameterName = "@BookId";
       bookIdParameter.Value = newBook.GetId();
@@ -216,7 +216,7 @@ namespace LibraryCatalog
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT books.* FROM authors JOIN book_authors ON (authors.id = book_authors.author_id) JOIN books ON (book_authors.book_id = books.id) WHERE authors.id = @AuthorId", conn);
+      SqlCommand cmd = new SqlCommand("SELECT books.* FROM authors JOIN book_author ON (authors.id = book_author.author_id) JOIN books ON (book_author.book_id = books.id) WHERE authors.id = @AuthorId", conn);
 
       SqlParameter authorIdParameter = new SqlParameter();
       authorIdParameter.ParameterName = "@AuthorId";
@@ -227,15 +227,15 @@ namespace LibraryCatalog
 
       List<Book> books = new List<Book> {};
       int bookId = 0;
-      string bookName = null;
-      string bookNumber = null;
+      string bookTitle = null;
+      DateTime publishDate = new DateTime(2000, 1, 1);
 
       while (rdr.Read())
       {
         bookId = rdr.GetInt32(0);
-        bookName = rdr.GetString(1);
-        bookNumber = rdr.GetString(2);
-        Book book = new Book(bookName, bookNumber, bookId);
+        bookTitle = rdr.GetString(1);
+        publishDate = rdr.GetDateTime(2);
+        Book book = new Book(bookTitle, publishDate, bookId);
         books.Add(book);
       }
       if (rdr != null)

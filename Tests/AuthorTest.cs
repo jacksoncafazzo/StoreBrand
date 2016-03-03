@@ -10,7 +10,7 @@ namespace LibraryCatalog
   {
     public AuthorTest()
     {
-      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=registrar_test;Integrated Security=SSPI;";
+      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=library_test;Integrated Security=SSPI;";
     }
 
     [Fact]
@@ -107,10 +107,10 @@ namespace LibraryCatalog
       Author testAuthor = new Author("Mr. Ed", "nickatnite.com");
       testAuthor.Save();
 
-      Book testBook1 = new Book("Mr. Magoo - Into the 22nd Century", new DateTime(2, 10, 12));
+      Book testBook1 = new Book("Mr. Magoo - Into the 22nd Century", new DateTime(2000, 10, 12));
       testBook1.Save();
 
-      Book testBook2 = new Book("Dreaming With Genie", new DateTime(2, 8, 12));
+      Book testBook2 = new Book("Dreaming With Genie", new DateTime(2000, 8, 12));
       testBook2.Save();
 
       //Act
@@ -127,7 +127,7 @@ namespace LibraryCatalog
     public void Delete_DeletesAuthorBookAuthorsFromDatabase()
     {
       //Arrange
-      Book testBook = new Book("Bees and their Stingers", new DateTime(2, 10, 12));
+      Book testBook = new Book("Bees and their Stingers", new DateTime(2000, 10, 12));
       testBook.Save();
 
       Author testAuthor = new Author("Farmer John", "Killer Mike");
