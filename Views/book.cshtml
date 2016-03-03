@@ -1,13 +1,14 @@
 <h1>Library Catalog</h1>
-<h3>List of books:</h3>
+<h3>This is your book:</h3>
 <hr />
 @if (Model != null)
   {
+    <h4>@Model["book"].GetTitle()</h4>
+    <p>Publish Date: @Model["book"].GetPublishDate().ToString("MM/dd/yyyy")</p>
     <ul>
-    @foreach (var book in Model)
+    @foreach (var author in Model["authors"])
     {
-      <li><a href="/books/@book.GetId()">@book.GetTitle()</a>: @book.GetPublishDate().ToString("MM/dd/yyyy")</li>
-
+      <li><a href="/books/@author.GetId()">@author.GetFullName()</a></li>
     }
     </ul>
 

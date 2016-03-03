@@ -53,6 +53,10 @@ namespace LibraryCatalog
     {
       _lastName = newLastName;
     }
+    public string GetFullName()
+    {
+      return _firstName + " " + _lastName;
+    }
 
     public static List<Author> GetAll()
     {

@@ -1,5 +1,5 @@
 <h1>Library Catalog</h1>
-<h3>List of Authors:</h3>
+<h3>Edit author?</h3>
 <hr />
 @{
   if (Model != null)
@@ -7,7 +7,11 @@
     <ul>
     @foreach (var author in Model)
     {
-    <li><a href="/authors/@author.GetId()">@author.GetFirstName() @author.GetLastName()</a></li>
+    <li><a href="/authors/@author.GetId()">@author.GetFullName()</a></li>
+    <form action="/authors/@author.GetId()" method="post">
+      <input type="hidden" name="_method" value="DELETE">
+      <button type="submit" name="button">delete this author</button>
+    </form>
     }
     </ul>
   }

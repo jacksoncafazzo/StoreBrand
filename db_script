@@ -1,0 +1,38 @@
+CREATE TABLE books (
+  id INT IDENTITY(1,1),
+  title VARCHAR(255),
+  publish_date DateTime not null
+);
+
+CREATE TABLE authors (
+  id INT IDENTITY(1,1),
+  firstname VARCHAR(255),
+  lastname VARCHAR(255)
+);
+
+CREATE TABLE book_author (
+  id INT IDENTITY(1,1),
+  book_id INT,
+  author_id INT
+);
+
+CREATE TABLE patrons (
+  id INT IDENTITY(1,1),
+  firstname VARCHAR(255),
+  lastname VARCHAR(255)
+);
+
+--
+CREATE TABLE copies (
+  id INT IDENTITY(1,1),
+  book_id INT,
+  copies INT
+);
+
+CREATE TABLE checkouts (
+  id INT IDENTITY(1,1),
+  patron_id INT,
+  book_id INT,
+  copies_id INT,
+  due_date DATETIME not null
+);
