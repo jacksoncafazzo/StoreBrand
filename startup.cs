@@ -5,7 +5,7 @@ using Nancy;
 using Nancy.ViewEngines.Razor;
 using System.Collections.Generic;
 
-namespace LibraryCatalog
+namespace StoreBrand
 {
   public class Startup
   {

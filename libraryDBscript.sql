@@ -1,5 +1,3 @@
-CREATE DATABASE storebrand
-GO
 
 USE storebrand
 GO
@@ -7,7 +5,7 @@ GO
 CREATE TABLE stores (
   id INT IDENTITY(1,1),
   name VARCHAR(255),
-  url string VARCHAR(255)
+  url VARCHAR(255)
 );
 
 CREATE TABLE brands (

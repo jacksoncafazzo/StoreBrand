@@ -1,7 +1,7 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace LibraryCatalog
+namespace StoreBrand
 {
   public class DB
   {
