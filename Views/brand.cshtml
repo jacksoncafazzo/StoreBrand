@@ -1,0 +1,29 @@
+@{
+  if (Model != null)
+  {
+    <h1>Store Brand</h1>
+    <h3>You are currently viewing @Model.GetName()</h3>
+    <hr />
+    <ul>
+      <li><a href="/brands/@Model.GetId()">@Model.GetName()</a></li>
+      <form action="/brands/@Model.GetId()" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" name="button">delete this brand</button>
+    </form>
+    </ul>
+  }
+
+  else
+  {
+  <h3>No brands to be found</h3>
+  }
+
+}
+
+<form action="/brands/delete" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+ <button type="submit" name="button">Delete all brands</button>
+</form>
+
+<h4><a href="/brands/new">Add a new brand</a></h4>
+<h4><a href="/">Cancel and return home</a></h4>

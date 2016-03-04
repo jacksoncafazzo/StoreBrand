@@ -45,17 +45,13 @@ namespace StoreBrand
     {
       _name = newName;
     }
-    public String GetLogo()
+    public string GetLogo()
     {
       return _logo;
     }
     public void SetLogo(string newLogo)
     {
       _logo = newLogo;
-    }
-    public string GetFullName()
-    {
-      return _name + " " + _logo;
     }
 
     public static List<Brand> GetAll()
@@ -94,15 +90,15 @@ namespace StoreBrand
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO brands (name, logo) OUTPUT INSERTED.id VALUES (@Name, @Logo); INSERT INTO Store_brand (brand_id) OUTPUT INSERTED.id VALUES (@BrandId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO brands (name, logo) OUTPUT INSERTED.id VALUES (@BrandName, @BrandLogo); INSERT INTO Store_brand (brand_id) OUTPUT INSERTED.id VALUES (@BrandId);", conn);
 
       SqlParameter nameParam = new SqlParameter();
-      nameParam.ParameterName = "@Name";
+      nameParam.ParameterName = "@BrandName";
       nameParam.Value = this.GetName();
       cmd.Parameters.Add(nameParam);
 
       SqlParameter logoParam = new SqlParameter();
-      logoParam.ParameterName = "@Logo";
+      logoParam.ParameterName = "@BrandLogo";
       logoParam.Value = this.GetLogo();
       cmd.Parameters.Add(logoParam);
 

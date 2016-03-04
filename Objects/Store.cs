@@ -69,8 +69,8 @@ namespace StoreBrand
       {
         int storeId = rdr.GetInt32(0);
         string storeName = rdr.GetString(1);
-        string Url = rdr.GetString(2);
-        Store newStore = new Store(storeName, Url, storeId);
+        string storeUrl = rdr.GetString(2);
+        Store newStore = new Store(storeName, storeUrl, storeId);
         allStores.Add(newStore);
       }
 

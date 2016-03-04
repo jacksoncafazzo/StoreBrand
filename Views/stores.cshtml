@@ -1,0 +1,29 @@
+<h1>Store Brand</h1>
+<h3>List of stores:</h3>
+<hr />
+@if (Model != null)
+  {
+    <ul>
+    @foreach (var store in Model["stores"])
+    {
+      <li><a href='/stores/@store.GetId()'>@store.GetName()</a>: @store.GetUrl()</li>
+      @foreach (var brand in @store.GetBrands())
+      {
+        <img src="/Content/img/@brand.GetLogo()">
+      }
+    }
+    </ul>
+
+  }
+  else
+  {
+    <h3>No stores to be found</h3>
+  }
+
+<form action="/stores/delete" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+ <button type="submit" name="button">Delete all stores</button>
+</form>
+
+<h4><a href="/stores/new">Add a new store</a></h4>
+<h4><a href="/">Return home</a></h4>
