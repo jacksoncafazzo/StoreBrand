@@ -1,16 +1,22 @@
 <h1>Store Brand</h1>
-<h3>Currently viewing @Model["store"].GetName()</h3>
+<h3>Currently editing @Model["store"].GetName()</h3>
 <hr />
 @if (Model != null)
   {
-    <h4>@Model["store"].GetName()</h4>
-    <p>Store link: @Model["store"].GetUrl()</p>
+    <form action='/stores/@Model["store"].GetId()/update' method="post">
+      <input type="hidden" name="_method" value="PATCH">
+      <input type="text" name="store-name" value='@Model["store"].GetName()'>
+      <p>Store link: <input type="text" name="store-url" value='@Model["store"].GetUrl()'></p>
     <ul>
     @foreach (var brand in Model["brands"])
     {
-      <li><a href="/brands/@brand.GetId()"><img src="/Content/img/@brand.GetLogo()"> </a></li>
+     <li>
+      <img src="/Content/img/@brand.GetLogo()">
+    </li>
     }
     </ul>
+    <button type="submit" name="update">update store values</button>
+  </form>
 
   }
   else
@@ -18,6 +24,7 @@
     <h3>No stores to be found</h3>
   }
   <form action='/stores/@Model["store"].GetId()/add_brand' method="post">
+    <label for="select-brand">Add a brand:</label>
     <select name="select-brand">
     @foreach (var brand in @Model["allbrands"])
     {
@@ -26,11 +33,19 @@
     </select>
     <button type="submit" name="add-brand">add</button>
   </form>
-
+  <form action='/stores/@Model["store"].GetId()/remove_brands' method="post">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" name="remove_brands">remove brands</button>
+  </form>
+  <form action='/stores/@Model["store"].GetId()/delete' method="post">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" name="button">delete this store</button>
+  </form>
   <form action="/stores/delete" method="post">
     <input type="hidden" name="_method" value="DELETE">
    <button type="submit" name="button">Delete all stores</button>
   </form>
 
 <h4><a href="/stores/new">Add a new store</a></h4>
-<h4><a href="/">Cancel and return home</a></h4>
+<h4><a href="/brands">View All Brands</a></h4>
+<h4><a href="/">Return home</a></h4>

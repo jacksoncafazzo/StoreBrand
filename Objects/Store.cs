@@ -193,6 +193,31 @@ namespace StoreBrand
       }
     }
 
+    public void RemoveStoreBrand(Brand newBrand)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM store_brand (store_id, brand_id) VALUES (@StoreId, @BrandId)", conn);
+
+      SqlParameter storeIdParameter = new SqlParameter();
+      storeIdParameter.ParameterName = "@StoreId";
+      storeIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(storeIdParameter);
+
+      SqlParameter brandIdParameter = new SqlParameter();
+      brandIdParameter.ParameterName = "@BrandId";
+      brandIdParameter.Value = newBrand.GetId();
+      cmd.Parameters.Add(brandIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
     public List<Brand> GetBrands()
     {
       SqlConnection conn = DB.Connection();
@@ -251,6 +276,47 @@ namespace StoreBrand
          conn.Close();
        }
      }
+
+    public void Update(string NewName, string NewUrl)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("UPDATE stores SET name = @NewName, url = @NewUrl  OUTPUT INSERTED.name, INSERTED.url WHERE id = @StoreId;", conn);
+
+      SqlParameter nameParameter = new SqlParameter();
+      nameParameter.ParameterName = "@NewName";
+      nameParameter.Value = NewName;
+      cmd.Parameters.Add(nameParameter);
+
+      SqlParameter urlParameter = new SqlParameter();
+      urlParameter.ParameterName = "@NewUrl";
+      urlParameter.Value = NewUrl;
+      cmd.Parameters.Add(urlParameter);
+
+      SqlParameter storeIdParameter = new SqlParameter();
+      storeIdParameter.ParameterName = "@StoreId";
+      storeIdParameter.Value = this._id;
+      cmd.Parameters.Add(storeIdParameter);
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._name = rdr.GetString(0);
+        this._url = rdr.GetString(1);
+      }
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
 
     public override int GetHashCode()
     {

@@ -9,7 +9,7 @@
       <li><a href='/stores/@store.GetId()'>@store.GetName()</a>: @store.GetUrl()</li>
       @foreach (var brand in @store.GetBrands())
       {
-        <img src="/Content/img/@brand.GetLogo()">
+        <a href="/brands/@brand.GetId()"><img src="/Content/img/@brand.GetLogo()"></a>
       }
     }
     </ul>

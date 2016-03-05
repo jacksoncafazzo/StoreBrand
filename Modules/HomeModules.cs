@@ -2,6 +2,7 @@ using Nancy;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Web;
 namespace StoreBrand
 {
   public class HomeModule : NancyModule
@@ -51,7 +52,7 @@ namespace StoreBrand
         Brand newBrand = Brand.Find(parameters.id);
         newBrand.Delete();
         List<Brand> AllBrands = Brand.GetAll();
-        return View["brand.cshtml", AllBrands];
+        return View["brands.cshtml", AllBrands];
       };
 
       Get["/stores/new"] = _ => {
@@ -59,13 +60,17 @@ namespace StoreBrand
       };
 
       Post["/stores/new"] = _ => {
+        Dictionary <string, object> models = new Dictionary<string, object>(){};
         Store newStore = new Store(Request.Form["store-name"], Request.Form["store-url"]);
         newStore.Save();
-        // Brand newBrand = new Brand(Request.Form["brand-name"], Request.Form["brand-logo"]);
-        // newBrand.Save();
-        // newStore.AddStoreBrand(newBrand);
-        List<Store> AllStores = Store.GetAll();
-        return View["stores.cshtml", AllStores];
+        List<Store> allStores = Store.GetAll();
+        List<Brand> selectedBrands = newStore.GetBrands();
+        List<Brand> allBrands = Brand.GetAll();
+        models.Add("stores", allStores);
+        models.Add("store", newStore);
+        models.Add("brands", allBrands);
+        models.Add("brand", selectedBrands);
+        return View["stores.cshtml", models];
       };
 
       Get["/stores/{id}"] = parameters => {
@@ -73,8 +78,10 @@ namespace StoreBrand
         Store newStore = Store.Find(parameters.id);
         List<Brand> selectedBrands = newStore.GetBrands();
         List<Brand> allBrands = Brand.GetAll();
+        List<Store> allStores = Store.GetAll();
         models.Add("brands", selectedBrands);
         models.Add("store", newStore);
+        models.Add("stores", allStores);
         models.Add("allbrands", allBrands);
         return View["store.cshtml", models];
       };
@@ -91,9 +98,37 @@ namespace StoreBrand
         return View["stores.cshtml", models];
       };
 
+      Delete["/stores/{id}/delete"] = parameters => {
+        Dictionary <string, object> models = new Dictionary<string, object>(){};
+        Store newStore = Store.Find(parameters.id);
+        newStore.Delete();
+        List<Brand> allBrands = Brand.GetAll();
+        List<Store> allStores = Store.GetAll();
+        models.Add("brands", allBrands);
+        models.Add("stores", allStores);
+        return View["stores.cshtml", models];
+      };
+
       Delete["/stores/delete"] = _ => {
         Store.DeleteAll();
         return View["index.cshtml"];
+      };
+
+      Delete["/stores/{id}/remove_brands"] = parameters => {
+        Dictionary <string, object> models = new Dictionary<string, object>(){};
+        Store newStore = Store.Find(parameters.id);
+        List<Brand> selectedBrands = newStore.GetBrands();
+        foreach (Brand brand in selectedBrands)
+        {
+          newStore.RemoveStoreBrand(brand);
+        }
+        List<Brand> allBrands = Brand.GetAll();
+        List<Store> allStores = Store.GetAll();
+        models.Add("brands", selectedBrands);
+        models.Add("store", newStore);
+        models.Add("allbrands", allBrands);
+        models.Add("stores", allStores);
+        return View["stores.cshtml", models];
       };
 
       Delete["/brands/delete"] = _ => {
@@ -101,6 +136,20 @@ namespace StoreBrand
         return View["index.cshtml"];
       };
 
+      Patch["/stores/{id}/update"] = parameters => {
+        Dictionary <string, object> models = new Dictionary<string, object>(){};
+        Store newStore = Store.Find(parameters.id);
+
+        newStore.Update(Request.Form["store-name"], Request.Form["store-url"]);
+        List<Brand> selectedBrands = newStore.GetBrands();
+        List<Brand> allBrands = Brand.GetAll();
+        List<Store> allStores = Store.GetAll();
+        models.Add("brands", selectedBrands);
+        models.Add("store", newStore);
+        models.Add("allbrands", allBrands);
+        models.Add("stores", allStores);
+        return View["stores.cshtml", models];
+      };
 
     }
   }
