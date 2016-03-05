@@ -198,7 +198,7 @@ namespace StoreBrand
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM store_brand (store_id, brand_id) VALUES (@StoreId, @BrandId)", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM store_brand WHERE store_id = @StoreId;", conn);
 
       SqlParameter storeIdParameter = new SqlParameter();
       storeIdParameter.ParameterName = "@StoreId";
