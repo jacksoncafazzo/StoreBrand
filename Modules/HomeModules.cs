@@ -44,14 +44,34 @@ namespace StoreBrand
       };
 
       Get["/brands/{id}"] = parameters => {
+        Dictionary <string, object> models = new Dictionary<string, object>(){};
         Brand newBrand = Brand.Find(parameters.id);
-        return View["brand.cshtml", newBrand];
+        List<Store> selectedStores = newBrand.GetStores();
+        List<Store> allStores = Store.GetAll();
+        models.Add("allStores", allStores);
+        models.Add("stores", selectedStores);
+        models.Add("brand", newBrand);
+        return View["brand.cshtml", models];
+      };
+
+      Post["/brands/{id}/add_brand"] = parameters => {
+        Dictionary <string, object> models = new Dictionary<string, object>(){};
+        Brand newBrand = Brand.Find(parameters.id);
+        Store newStore = Store.Find(Request.Form["select-store"]);
+        newBrand.AddStore(newStore);
+        List<Store> selectedStores = newBrand.GetStores();
+        List<Store> allStores = Store.GetAll();
+        models.Add("allStores", allStores);
+        models.Add("stores", selectedStores);
+        models.Add("brand", newBrand);
+        return View["brand.cshtml", models];
       };
 
       Delete["/brands/{id}"] = parameters => {
         Brand newBrand = Brand.Find(parameters.id);
         newBrand.Delete();
         List<Brand> AllBrands = Brand.GetAll();
+
         return View["brands.cshtml", AllBrands];
       };
 

@@ -1,16 +1,32 @@
 @{
   if (Model != null)
   {
-    <h1>Store Brand</h1>
-    <h3>You are currently viewing @Model.GetName()</h3>
+    <h3>You are currently viewing @Model["brand"].GetName()</h3>
     <hr />
     <ul>
-      <li>@Model.GetName() <img src="/Content/img/@Model.GetLogo()"></li>
-      <form action="/brands/@Model.GetId()" method="post">
+      <li>@Model["brand"].GetName() <img src='/Content/img/@Model["brand"].GetLogo()'></li>
+      <form action='/brands/@Model["brand"].GetId()' method="post">
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" name="button">delete this brand</button>
     </form>
     </ul>
+    <h4>Currently offered at these fine establishments:</h4>
+      <ul>
+        @foreach (var store in Model["stores"])
+        {
+          <li><a href="/stores/@store.GetId()"></a>@store.GetName()</li>
+        }
+      </ul>
+    <form action='/brands/@Model["brand"].GetId()/add_brand' method="post">
+      <label for="select-brand">Add a store:</label>
+      <select name="select-brand">
+        @foreach (var store in @Model["allStores"])
+        {
+          <option name="select-store" value="@store.GetId()">@store.GetName()</option>
+        }
+      </select>
+      <button type="submit" name="add-brand">add store</button>
+    </form>
   }
 
   else
