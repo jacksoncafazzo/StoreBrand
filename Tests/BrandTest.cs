@@ -10,7 +10,7 @@ namespace StoreBrand
   {
     public BrandTest()
     {
-      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=storebrand_test;Integrated Security=SSPI;";
+      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=shoestores_test;Integrated Security=SSPI;";
     }
 
     [Fact]
@@ -124,7 +124,7 @@ namespace StoreBrand
     }
 
     [Fact]
-    public void Delete_DeletesBrandStoreBrandsFromDatabase()
+    public void Delete_DeletesBrandshoestoressFromDatabase()
     {
       //Arrange
       Store testStore = new Store("Get Shoes Here", "gotshoe.com");

@@ -16,7 +16,7 @@ CREATE TABLE brands (
   logo VARCHAR(255)
 );
 
-CREATE TABLE store_brand (
+CREATE TABLE brand_store (
   id INT IDENTITY(1,1),
   store_id INT,
   brand_id INT

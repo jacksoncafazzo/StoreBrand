@@ -90,7 +90,7 @@ namespace StoreBrand
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO brands (name, logo) OUTPUT INSERTED.id VALUES (@BrandName, @BrandLogo); INSERT INTO Store_brand (brand_id) OUTPUT INSERTED.id VALUES (@BrandId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO brands (name, logo) OUTPUT INSERTED.id VALUES (@BrandName, @BrandLogo);", conn);
 
       SqlParameter nameParam = new SqlParameter();
       nameParam.ParameterName = "@BrandName";
@@ -172,7 +172,7 @@ namespace StoreBrand
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM brands WHERE id = @BrandId; DELETE FROM store_brand WHERE brand_id = @BrandId;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM brands WHERE id = @BrandId; DELETE FROM brand_store WHERE brand_id = @BrandId;", conn);
       SqlParameter brandIdParameter = new SqlParameter();
       brandIdParameter.ParameterName = "@BrandId";
       brandIdParameter.Value = this.GetId();
@@ -191,7 +191,7 @@ namespace StoreBrand
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO store_brand (store_id, brand_id) VALUES (@StoreId, @BrandId)", conn);  //needs more stuff - Store relationship
+      SqlCommand cmd = new SqlCommand("INSERT INTO brand_store (store_id, brand_id) VALUES (@StoreId, @BrandId)", conn);  //needs more stuff - Store relationship
       SqlParameter StoreIdParameter = new SqlParameter();
       StoreIdParameter.ParameterName = "@StoreId";
       StoreIdParameter.Value = newStore.GetId();
@@ -216,7 +216,7 @@ namespace StoreBrand
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT stores.* FROM brands JOIN store_brand ON (brands.id = store_brand.brand_id) JOIN stores ON (store_brand.store_id = stores.id) WHERE brands.id = @BrandId", conn);
+      SqlCommand cmd = new SqlCommand("SELECT stores.* FROM brands JOIN brand_store ON (brands.id = brand_store.brand_id) JOIN stores ON (brand_store.store_id = stores.id) WHERE brands.id = @BrandId", conn);
 
       SqlParameter brandIdParameter = new SqlParameter();
       brandIdParameter.ParameterName = "@BrandId";
