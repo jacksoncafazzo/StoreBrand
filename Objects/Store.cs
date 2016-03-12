@@ -92,7 +92,9 @@ namespace StoreBrand
       SqlDataReader rdr;
       conn.Open();
 
+
       SqlCommand cmd = new SqlCommand("INSERT INTO stores (name, url) OUTPUT INSERTED.id VALUES (@StoreName, @Url); INSERT INTO brands_stores (store_id) OUTPUT INSERTED.id VALUES (@StoreId)", conn);
+
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@StoreName";
@@ -173,7 +175,9 @@ namespace StoreBrand
       SqlConnection conn = DB.Connection();
       conn.Open();
 
+
       SqlCommand cmd = new SqlCommand("INSERT INTO brands_stores (store_id, brand_id) VALUES (@StoreId, @BrandId)", conn);
+
 
       SqlParameter storeIdParameter = new SqlParameter();
       storeIdParameter.ParameterName = "@StoreId";
@@ -197,6 +201,7 @@ namespace StoreBrand
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
+
 
       SqlCommand cmd = new SqlCommand("DELETE FROM brands_stores WHERE store_id = @StoreId;", conn);
 
@@ -224,7 +229,9 @@ namespace StoreBrand
       SqlDataReader rdr = null;
       conn.Open();
 
+
       SqlCommand cmd = new SqlCommand("SELECT brands.* FROM stores JOIN brands_stores ON (stores.id = brands_stores.store_id) JOIN brands ON (brands_stores.brand_id = brands.id) WHERE stores.id = @StoreId", conn);
+
       SqlParameter storeIdParameter = new SqlParameter();
       storeIdParameter.ParameterName = "@StoreId";
       storeIdParameter.Value = this.GetId();
@@ -263,7 +270,9 @@ namespace StoreBrand
        SqlConnection conn = DB.Connection();
        conn.Open();
 
+
        SqlCommand cmd = new SqlCommand("DELETE FROM stores WHERE id = @StoreId; DELETE FROM brands_stores WHERE store_id = @StoreId;", conn);
+
        SqlParameter storeIdParameter = new SqlParameter();
        storeIdParameter.ParameterName = "@StoreId";
        storeIdParameter.Value = this.GetId();

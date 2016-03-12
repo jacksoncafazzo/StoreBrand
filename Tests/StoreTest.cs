@@ -10,7 +10,9 @@ namespace StoreBrand
   {
     public StoreTest()
     {
+
       DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=shoe_stores_test;Integrated Security=SSPI;";
+
     }
 
     [Fact]
