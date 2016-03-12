@@ -1,51 +1,62 @@
-<h1>Store Brand</h1>
+@Html.Partial("header.cshtml")
+@Html.Partial("navbar.cshtml")
+
 <h3>Currently editing @Model["store"].GetName()</h3>
 <hr />
 @if (Model != null)
   {
-    <form action='/stores/@Model["store"].GetId()/update' method="post">
-      <input type="hidden" name="_method" value="PATCH">
-      <input type="text" name="store-name" value='@Model["store"].GetName()'>
-      <p>Store link: <input type="text" name="store-url" value='@Model["store"].GetUrl()'></p>
-    <ul>
-    @foreach (var brand in Model["brands"])
-    {
-     <li>
-      <img src="/Content/img/@brand.GetLogo()">
-    </li>
-    }
-    </ul>
-    <button type="submit" name="update">update store values</button>
-  </form>
+    <div class="row">
+      <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        <form action='/stores/@Model["store"].GetId()/update' method="post">
+          <input type="hidden" name="_method" value="PATCH">
+          <input type="text" name="store-name" value='@Model["store"].GetName()'>
+          <p>Store link: <input type="text" name="store-url" value='@Model["store"].GetUrl()'></p>
+          <button type="submit" name="update">update store values</button>
+        </form>
+        <ul>
+        @foreach (var brand in Model["brands"])
+        {
+        <a class="brand-icon" href="/brands/@brand.GetId()"><img src="/Content/img/@brand.GetLogo()"></a>
+        }
+        </ul>
 
-  }
-  else
-  {
-    <h3>No stores to be found</h3>
-  }
-  <form action='/stores/@Model["store"].GetId()/add_brand' method="post">
-    <label for="select-brand">Add a brand:</label>
-    <select name="select-brand">
-    @foreach (var brand in @Model["allbrands"])
-    {
-      <option name="select-brand" value="@brand.GetId()">@brand.GetName()</option>
-    }
-    </select>
-    <button type="submit" name="add-brand">add</button>
-  </form>
-  <form action='/stores/@Model["store"].GetId()/remove_brands' method="post">
-    <input type="hidden" name="_method" value="DELETE">
-    <button type="submit" name="remove_brands">remove brands</button>
-  </form>
-  <form action='/stores/@Model["store"].GetId()/delete' method="post">
-    <input type="hidden" name="_method" value="DELETE">
-    <button type="submit" name="button">delete this store</button>
-  </form>
-  <form action="/stores/delete" method="post">
-    <input type="hidden" name="_method" value="DELETE">
-   <button type="submit" name="button">Delete all stores</button>
-  </form>
+      </div>
+      <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
+        <form action='/stores/@Model["store"].GetId()/add_brand' method="post">
+          <label for="select-brand">Add a brand:</label>
+          <select name="select-brand">
+          @foreach (var brand in @Model["allBrands"])
+          {
+            <option name="select-brand" value="@brand.GetId()">@brand.GetName()</option>
+          }
+          </select>
+          <button type="submit" name="add-brand">add</button>
+        </form>
+        <form action="/stores" action="get">
+          <button type="submit" class="btn" name="stores">Show me all the stores</button>
+        </form>
+        <form action='/stores/@Model["store"].GetId()/remove_brands' method="post">
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="submit" class="btn btn-danger" name="remove_brands">Remove @Model["store"].GetName()'s brands</button>
+        </form>
+      </div>
 
-<h4><a href="/stores/new">Add a new store</a></h4>
-<h4><a href="/brands">View All Brands</a></h4>
-<h4><a href="/">Return home</a></h4>
+
+
+    <form action='/stores/@Model["store"].GetId()/delete' method="post">
+      <input type="hidden" name="_method" value="DELETE">
+      <button type="submit" class="btn btn-danger" name="button">Delete this store</button>
+    </form>
+    <form action="/stores/delete" method="post">
+      <input type="hidden" name="_method" value="DELETE">
+     <button type="submit" class="btn btn-danger" name="button">Delete all stores</div>
+    </form>
+  </div>
+}
+else
+{
+  <h3>No stores to be found</h3>
+  <h4><a href="/stores/new">Add a new store</a></h4>
+  <h4><a href="/brands">View All Brands</a></h4>
+  <h4><a href="/">Return home</a></h4>
+}

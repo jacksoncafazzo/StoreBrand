@@ -18,7 +18,52 @@ Navigate to http://localhost:5004
 
 ## Technologies Used
 
-csharp, Nancy, Razor, CRUD functionality, HTML5, CSS3, Bootstrap
+MSSQLlocaldb with SQL server application of your choice, .NET dnx, Razor, CRUD functionality, HTML5, CSS3, Bootstrap
+
+
+## Setup (How To)
+
+###Importing in  using sqlcmd
+Run sqlcmd in powershell:
+sqlcmd -S "(localdb)\mssqllocaldb"
+enter these commands into the sqlcmd prompt:
+CREATE DATABASE shoe_stores
+GO
+
+USE shoe_stores
+GO
+
+CREATE TABLE stores (
+  id INT IDENTITY(1,1),
+  name VARCHAR(255),
+  url VARCHAR(255)
+);
+
+CREATE TABLE brands (
+  id INT IDENTITY(1,1),
+  name VARCHAR(255),
+  logo VARCHAR(255)
+);
+
+CREATE TABLE brands_stores (
+  id INT IDENTITY(1,1),
+  store_id INT,
+  brand_id INT
+);
+
+###Importing databases with SSMS
+Open SSMS
+Select File > Open > File and select the shoe_storesDBscript.sql file.
+If the database does not already exist, add the following lines to the top of the script file
+CREATE DATABASE [shoe_stores]
+GO
+Save the file.
+Click ! Execute.
+Verify that the database has been created and the schema and/or data imported.
+Repeat using shoe_stores_test as the database to create.
+
+To add brand logos, first copy the brand image to the Content/img folder and then type the name of the image file in the "brand logo" form as you add a new brand.
+I've added "simple.png" to the folder but no simple brand. Try it out when you add a new brand!
 
 ### Legal
 

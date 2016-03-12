@@ -1,10 +1,13 @@
+@Html.Partial("header.cshtml")
+@Html.Partial("navbar.cshtml")
+
 <h3>Add a new store here:</h3>
 <hr />
 <form class="/stores/new" method="post">
   <label for="store-name">Store Name:</label>
   <input id="store-name" name="store-name" type="text">
   <br>
-  <label for="store-url">Store Url:</label>
+  <label for="store-url">Store Url:</label> ("http://" not required)
   <input id="store-url" name="store-url" type="text">
   <br>
   <button type="submit">Add Store</button>

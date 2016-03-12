@@ -1,16 +1,14 @@
-<h3>List of Brands:</h3>
-<hr />
+@Html.Partial("header.cshtml")
+@Html.Partial("navbar.cshtml")
+
 @{
   if (Model != null)
   {
-    <ul>
-    @foreach (var brand in Model)
+    foreach (var brand in Model["brands"])
     {
-    <li>@brand.GetName():  <a href="/brands/@brand.GetId()">
-    <img class="brand" src="/Content/img/@brand.GetLogo()"></a>
-    </li>
+      <h4>@brand.GetName()</h4>
+      <a href='/brands/@brand.GetId()'><img class="brand" src='/Content/img/@brand.GetLogo()'></a>
     }
-    </ul>
   }
   else
   {
@@ -18,11 +16,10 @@
   }
 }
 
-<form action="/brands/delete" method="post">
-  <input type="hidden" name="_method" value="DELETE">
- <button type="submit" name="button">Delete all brands</button>
-</form>
-
 <h4><a href="/brands/new">Add Brand</a></h4>
 <h4><a href="/stores">View All Stores</h4>
 <h4><a href="/">Return home</a></h4>
+<form action="/brands/delete" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+ <button type="submit" class="btn btn-danger" name="button">Delete all brands</button>
+</form>

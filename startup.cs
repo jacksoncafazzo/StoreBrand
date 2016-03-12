@@ -38,9 +38,8 @@ namespace StoreBrand
       get { return false; }
     }
   }
-
   public static class DBConfiguration
     {
-        public static string ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=storebrand;Integrated Security=SSPI;";
+        public static string ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=shoe_stores;Integrated Security=SSPI;";
     }
 }

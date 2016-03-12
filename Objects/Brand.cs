@@ -172,7 +172,7 @@ namespace StoreBrand
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM brands WHERE id = @BrandId; DELETE FROM store_brand WHERE brand_id = @BrandId;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM brands WHERE id = @BrandId; DELETE FROM brands_stores WHERE brand_id = @BrandId;", conn);
       SqlParameter brandIdParameter = new SqlParameter();
       brandIdParameter.ParameterName = "@BrandId";
       brandIdParameter.Value = this.GetId();
@@ -191,7 +191,7 @@ namespace StoreBrand
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO store_brand (store_id, brand_id) VALUES (@StoreId, @BrandId)", conn);  //needs more stuff - Store relationship
+      SqlCommand cmd = new SqlCommand("INSERT INTO brands_stores (store_id, brand_id) VALUES (@StoreId, @BrandId)", conn);
       SqlParameter StoreIdParameter = new SqlParameter();
       StoreIdParameter.ParameterName = "@StoreId";
       StoreIdParameter.Value = newStore.GetId();
@@ -216,7 +216,7 @@ namespace StoreBrand
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT stores.* FROM brands JOIN store_brand ON (brands.id = store_brand.brand_id) JOIN stores ON (store_brand.store_id = stores.id) WHERE brands.id = @BrandId", conn);
+      SqlCommand cmd = new SqlCommand("SELECT stores.* FROM brands JOIN brands_stores ON (brands.id = brands_stores.brand_id) JOIN stores ON (brands_stores.store_id = stores.id) WHERE brands.id = @BrandId", conn);
 
       SqlParameter brandIdParameter = new SqlParameter();
       brandIdParameter.ParameterName = "@BrandId";
@@ -225,7 +225,7 @@ namespace StoreBrand
 
       rdr = cmd.ExecuteReader();
 
-      List<Store> Stores = new List<Store> {};
+      List<Store> selectedStores = new List<Store> {};
       int StoreId = 0;
       string StoreName = null;
       string StoreLogo = null;
@@ -235,15 +235,15 @@ namespace StoreBrand
         StoreId = rdr.GetInt32(0);
         StoreName = rdr.GetString(1);
         StoreLogo = rdr.GetString(2);
-        Store Store = new Store(StoreName, StoreLogo, StoreId);
-        Stores.Add(Store);
+        Store store = new Store(StoreName, StoreLogo, StoreId);
+        selectedStores.Add(store);
       }
       if (rdr != null)
       {
         rdr.Close();
       }
 
-      return Stores;
+      return selectedStores;
     }
   }
 }

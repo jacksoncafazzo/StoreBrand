@@ -1,12 +1,13 @@
-<h1>Store Brand</h1>
-<h3>List of stores:</h3>
+@Html.Partial("header.cshtml")
+@Html.Partial("navbar.cshtml")
+
 <hr />
 @if (Model != null)
   {
     <ul>
     @foreach (var store in Model["stores"])
     {
-      <li><a href='/stores/@store.GetId()'>@store.GetName()</a>: @store.GetUrl()</li>
+      <li><a href='/stores/@store.GetId()'>@store.GetName()</a>  --- store's website: http://<a href="http://@store.GetUrl()">@store.GetUrl()</a></li>
       @foreach (var brand in @store.GetBrands())
       {
         <a href="/brands/@brand.GetId()"><img src="/Content/img/@brand.GetLogo()"></a>

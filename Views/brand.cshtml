@@ -1,15 +1,16 @@
+@Html.Partial("header.cshtml")
+@Html.Partial("navbar.cshtml")
+
 @{
   if (Model != null)
   {
     <h3>You are currently viewing @Model["brand"].GetName()</h3>
     <hr />
-    <ul>
-      <li>@Model["brand"].GetName() <img src='/Content/img/@Model["brand"].GetLogo()'></li>
+    <img src='/Content/img/@Model["brand"].GetLogo()'>
       <form action='/brands/@Model["brand"].GetId()' method="post">
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" name="button">delete this brand</button>
     </form>
-    </ul>
     <h4>Currently offered at these fine establishments:</h4>
       <ul>
         @foreach (var store in Model["stores"])
@@ -17,15 +18,15 @@
           <li><a href="/stores/@store.GetId()"></a>@store.GetName()</li>
         }
       </ul>
-    <form action='/brands/@Model["brand"].GetId()/add_brand' method="post">
-      <label for="select-brand">Add a store:</label>
-      <select name="select-brand">
+    <form action='/brands/@Model["brand"].GetId()/add_store' method="post">
+      <label for="select-store">Add a store:</label>
+      <select name="select-store">
         @foreach (var store in @Model["allStores"])
         {
           <option name="select-store" value="@store.GetId()">@store.GetName()</option>
         }
       </select>
-      <button type="submit" name="add-brand">add store</button>
+      <button type="submit" name="add-store">add store</button>
     </form>
   }
 
@@ -38,7 +39,7 @@
 
 <form action="/brands/delete" method="post">
   <input type="hidden" name="_method" value="DELETE">
- <button type="submit" name="button">Delete all brands</button>
+ <button type="submit" class="btn btn-danger" name="delete">Delete all brands</button>
 </form>
 
 <h4><a href="/brands/new">Add a new brand</a></h4>
