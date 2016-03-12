@@ -16,13 +16,6 @@ run "dnu restore"
 run "dnx kestrel"
 Navigate to http://localhost:5004
 
-## Technologies Used
-
-MSSQLlocaldb with SQL server application of your choice, .NET dnx, Razor, CRUD functionality, HTML5, CSS3, Bootstrap
-
-
-## Setup (How To)
-
 ###Importing in  using sqlcmd
 Run sqlcmd in powershell:
 sqlcmd -S "(localdb)\mssqllocaldb"
@@ -64,6 +57,10 @@ Repeat using shoe_stores_test as the database to create.
 
 To add brand logos, first copy the brand image to the Content/img folder and then type the name of the image file in the "brand logo" form as you add a new brand.
 I've added "simple.png" to the folder but no simple brand. Try it out when you add a new brand!
+
+## Technologies Used
+
+MSSQLlocaldb with SQL server application of your choice, .NET dnx, Razor, CRUD functionality, HTML5, CSS3, Bootstrap
 
 ### Legal
 
